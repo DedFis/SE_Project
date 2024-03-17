@@ -42,7 +42,7 @@ const PaymentRequest = () => {
                             </div>
                             {
                                 <List
-                                style={{minWidth : '340px'}}
+                                style={{minWidth : '340px', overflowX:'hidden'}}
                                 className='List'
                                 height={350}
                                 itemCount={10}
