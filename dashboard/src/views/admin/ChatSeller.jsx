@@ -38,7 +38,7 @@ const ChatSeller = () => {
                         {
                             sellerId && <div className='flex justify-start items-center gap-3'>
                                 <div className='relative'>
-                                    <img className='w-[43px] h-[38px] border-green-500 border-2 max-w-[38px] p-[2px] rounded-full' src="http://localhost:3000/images/duck.jpg" alt="" />
+                                    <img className='w-[42px] h-[42px] border-green-500 border-2 max-w-[38px] p-[2px] rounded-full' src="http://localhost:3000/images/duck.jpg" alt="" />
                                     <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
                                 </div>
                             </div>
@@ -49,11 +49,15 @@ const ChatSeller = () => {
                                 <FaList />
                             </span>
                         </div>
-
                     </div>
-                    <div className='py-4'>
-                        <div className='bg-slate-800 h-[calc(100vh - 290px)] rounded-md p-3 overflow-y-auto'>
 
+                    <div className='py-4'>
+                        <div className='bg-slate-800 h-[calc(100% - 290px)] rounded-md p-3 overflow-y-auto'>
+                            <div className='w-full flex justify-start items-center'>
+                                <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
+                                    <img className='w-[38px] h-[38px] border-2 border-white max-w-[38px] p-[3px] rounded-full' src="http://localhost:3000/images/duck.jpg" alt="" />
+                                </div>
+                            </div>
                         </div>
                     </div>
 
