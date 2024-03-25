@@ -125,7 +125,7 @@ const AdminDashboard = () => {
                         <div className="flex flex-col gap-2 pt-6 text-[#d0d2d6]">
                             <ol className="relative border-1 border-slate-600 ml-4"> 
                                 <li className="mb-3 ml-6">
-                                    <div className="flex absolute -left-5 shadow-lg flex justify-center items-center w-10 h-10 p-[6px] bg-[#00d1e848] rounded-full z-10"><img className="w-full rounded-full h-full shadow-lg" src="http://localhost:3000/images/duck.jpg" alt="" /></div>
+                                    <div className="flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[6px] bg-[#00d1e848] rounded-full z-10"><img className="w-full rounded-full h-full shadow-lg" src="http://localhost:3000/images/duck.jpg" alt="" /></div>
                                     <div className="p-3 bg-blue-700 rounded-lg shadow-sm"> 
                                         <div className="flex justify-between items-center mb-2">
                                             <Link className="text-md font-normal text-white">Admin</Link>
