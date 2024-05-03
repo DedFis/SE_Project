@@ -3,23 +3,33 @@ import {Link} from 'react-router-dom';
 import {AiOutlineGooglePlus, AiOutlineGithub} from 'react-icons/ai'
 import {FiFacebook} from 'react-icons/fi'
 import {CiTwitter} from 'react-icons/ci'
+import {PropagateLoader} from 'react-spinners'
+import {useDispatch, useSelector} from 'react-redux'
+import {overrideStyle} from '../../utils/utils'
+import {seller_register} from '../../store/Reducers/authReducer'
 
 const Register = () => {
+    const {loader} = useSelector(state => state.auth)
+    const dispatch = useDispatch
+
     const[state, setState] = useState({
         name: '',
         email: "",
         password: ''
     })
+
     const inputHandle = (e) => {
         setState({
             ...state,
             [e.target.name]: e.target.value
         })
     }
+
     const submit = (e) => {
         e.preventDefault()
-        console.log(state)
+        dispatch(seller_register(state))
     }
+
     return ( 
         <div className="min-w-screen min-h-screen bg-blue-500 flex justify-center items-center">
             <div className="w-[550px] text-[#d0d2d6] p-2">
@@ -43,7 +53,11 @@ const Register = () => {
                             <input className="w-4 h-4 text-blue-600 overflow-hidden bg-gray-100 rounded border-gray-300 focus:ring-blue-500" type="checkbox" name="checkbox" id="checkbox" required />
                             <label htmlFor="checkbox">I aggree to privacy policy & terms</label>
                         </div>
-                        <button className="bg-blue-500 w-full hover:shadow-blue-500/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3 font-mono">Sign Up</button>
+                        <button disabled={loader ? true : false} className="bg-blue-500 w-full hover:shadow-blue-500/20 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3">
+                            {
+                                loader ? <PropagateLoader color='#fff' cssOverride={overrideStyle} /> : ('Sign Up')
+                            }
+                        </button>
                         <div className='flex items-center mb-3 gap-3 justify-center font-mono text-sm'>
                             <p>Already have an account? <Link to="/login">Sign In here</Link></p>
                         </div>
