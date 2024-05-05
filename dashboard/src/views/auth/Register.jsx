@@ -1,16 +1,17 @@
-import {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom';
+import toast from 'react-hot-toast'
 import {AiOutlineGooglePlus, AiOutlineGithub} from 'react-icons/ai'
 import {FiFacebook} from 'react-icons/fi'
 import {CiTwitter} from 'react-icons/ci'
 import {PropagateLoader} from 'react-spinners'
 import {useDispatch, useSelector} from 'react-redux'
 import {overrideStyle} from '../../utils/utils'
-import {seller_register} from '../../store/Reducers/authReducer'
+import {messageClear, seller_register} from '../../store/Reducers/authReducer'
 
 const Register = () => {
-    const {loader} = useSelector(state => state.auth)
-    const dispatch = useDispatch
+    const {loader, successMessage, errorMessage} = useSelector(state => state.auth)
+    const dispatch = useDispatch()
 
     const[state, setState] = useState({
         name: '',
@@ -29,6 +30,17 @@ const Register = () => {
         e.preventDefault()
         dispatch(seller_register(state))
     }
+
+    useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage)
+            dispatch(messageClear())
+        }
+        if (errorMessage) {
+            toast.error(errorMessage)
+            dispatch(messageClear())
+        }
+    }, [successMessage, errorMessage])
 
     return ( 
         <div className="min-w-screen min-h-screen bg-blue-500 flex justify-center items-center">
@@ -59,7 +71,7 @@ const Register = () => {
                             }
                         </button>
                         <div className='flex items-center mb-3 gap-3 justify-center font-mono text-sm'>
-                            <p>Already have an account? <Link to="/login">Sign In here</Link></p>
+                            <p>Already have an account? <Link to="/login" className='font-bold'>Sign In here</Link></p>
                         </div>
                         <div className='w-full flex justify-center items-center mb-3'>
                             <div className='w-[45%] bg-slate-700 h-[1px]'></div>

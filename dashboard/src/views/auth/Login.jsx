@@ -1,24 +1,46 @@
-import {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom';
 import {AiOutlineGooglePlus, AiOutlineGithub} from 'react-icons/ai'
 import {FiFacebook} from 'react-icons/fi'
 import {CiTwitter} from 'react-icons/ci'
+import {overrideStyle} from '../../utils/utils'
+import {PropagateLoader} from 'react-spinners'
+import {useDispatch, useSelector} from 'react-redux'
+import toast from 'react-hot-toast'
+import {messageClear, seller_login} from '../../store/Reducers/authReducer'
 
 const Login = () => {
+    const {loader, successMessage, errorMessage} = useSelector(state => state.auth)
+    const dispatch = useDispatch()
+
     const[state, setState] = useState({
         email: "",
         password: ''
     })
+
     const inputHandle = (e) => {
         setState({
             ...state,
             [e.target.name]: e.target.value
         })
     }
+
     const submit = (e) => {
         e.preventDefault()
-        console.log(state)
+        dispatch(seller_login(state))
     }
+
+    useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage)
+            dispatch(messageClear())
+        }
+        if (errorMessage) {
+            toast.error(errorMessage)
+            dispatch(messageClear())
+        }
+    }, [successMessage, errorMessage])
+
     return ( 
         <div className="min-w-screen min-h-screen bg-blue-500 flex justify-center items-center">
             <div className="w-[450px] text-[#d0d2d6] p-2">
@@ -28,15 +50,19 @@ const Login = () => {
                     <form onSubmit={submit}>
                         <div className="flex flex-col w-full gap-1 mb-3 font-mono">
                             <label htmlFor="email">Email</label>
-                            <input onChange={inputHandle} value={state.email} className="px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md text-[#d0d2d6] focus:border-indigo-500 overflow-hidden" type="text" name="email" placeholder="email" id="email" required />
+                            <input onChange={inputHandle} value={state.email} className="px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md text-[#d0d2d6] focus:border-indigo-500 overflow-hidden" type="email" name="email" placeholder="email" id="email" required />
                         </div>
                         <div className="flex flex-col w-full gap-1 mb-5 font-mono">
                             <label htmlFor="password">Password</label>
-                            <input onChange={inputHandle} value={state.password} className="px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md text-[#d0d2d6] focus:border-indigo-500 overflow-hidden" type="text" name="password" placeholder="password" id="password" required />
+                            <input onChange={inputHandle} value={state.password} className="px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md text-[#d0d2d6] focus:border-indigo-500 overflow-hidden" type="password" name="password" placeholder="password" id="password" required />
                         </div>
-                        <button className="bg-blue-500 w-full hover:shadow-blue-500/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3 font-mono">Sign In</button>
+                        <button disabled={loader ? true : false} className="bg-blue-500 w-full hover:shadow-blue-500/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3">
+                            {
+                                loader ? <PropagateLoader color='#fff' cssOverride={overrideStyle} /> : ('Sign In')
+                            }
+                        </button>
                         <div className='flex text-sm items-center mb-3 gap-3 justify-center font-mono'>
-                            <p>Already have an account? <Link to="/register">Signup here</Link></p>
+                            <p>Don't have an account? <Link to="/register" className='font-bold'>Sign Up here</Link></p>
                         </div>
                         <div className='w-full flex justify-center items-center mb-3'>
                             <div className='w-[45%] bg-slate-700 h-[1px]'></div>

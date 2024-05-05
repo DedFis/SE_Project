@@ -11,10 +11,14 @@ app.use(cors({
     origin: ['http://localhost:3000'],
     credentials: true
 }))
+
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use('/api', require('./routes/authRoutes'))
 app.get('/', (req, res) => res.send('Hello World'))
+
 const port = process.env.PORT
 dbConnect()
-app.listen(port, () => console.log(`Server is running on port ${port}!`))
+app.listen(port, function(req, res){
+    console.log(`Server is running on port ${port}!`);
+})
