@@ -12,7 +12,7 @@ class authControllers{
        const {email, password} = req.body
        try {
             const admin = await adminModel.findOne({email}).select('+password')
-            if(admin){
+            if(admin) {
                 const match = await bcrypt.compare(password, admin.password)
                 if(match){
                     const token = await createToken({
@@ -28,12 +28,12 @@ class authControllers{
                     responseReturn(res, 404, {error: "Password wrong!"})
                 }
             }
-            else{
+            else {
                 responseReturn(res, 404, {error: "Email not found!"})
             }
-       } catch (error) {
-        responseReturn(res, 500, {error: error.message})
-       }
+        } catch (error) {
+            responseReturn(res, 500, {error: error.message})
+        }
     }
 
     seller_login = async(req,res)=>{
@@ -76,7 +76,7 @@ class authControllers{
                     name,
                     email,
                     password : await bcrypt.hash(password, 10),
-                    method : "menualy",
+                    method : "manually",
                     shopInfo : {}
                 })
                 await sellerCustomerModel.create({
@@ -90,7 +90,6 @@ class authControllers{
                 responseReturn(res, 201, {token, message : 'register success'})
             }
         } catch(error) {
-            console.log(error)
             responseReturn(res, 500, {error: 'Internal server error'})
         }
     }
@@ -101,13 +100,14 @@ class authControllers{
         try {
             if(role === 'admin'){
                 const user = await adminModel.findById(id)
-                responseReturn(res, 404, {userInfo : user})
+                responseReturn(res, 200, {userInfo : user})
             }
             else{
-                console.log('seller info')
+                const seller = await sellerModel.findById(id)
+                responseReturn(res, 200, {userInfo : seller})
             }
         } catch (error) {
-            console.log(error.message)
+            responseReturn(res, 500, {error: 'Internal server error'})
         }
     }
 }
