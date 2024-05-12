@@ -3,12 +3,16 @@ import { Link } from "react-router-dom";
 import { BsImages } from "react-icons/bs";
 import { IoCloseSharp } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
+import toast from 'react-hot-toast';
+import { PropagateLoader } from "react-spinners";
+import { overrideStyle } from "../../utils/utils";
 import { getCategory } from "../../store/Reducers/categoryReducer";
-import { addProduct } from "../../store/Reducers/productReducer";
+import { addProduct, messageClear } from "../../store/Reducers/productReducer";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
   const {categorys} = useSelector(state => state.category)
+  const {successMessage, errorMessage, loader} = useSelector(state => state.product)
 
   useEffect(() => {
     dispatch(getCategory({
@@ -108,6 +112,28 @@ const AddProduct = () => {
     }
     dispatch(addProduct(formData))
   }
+
+  useEffect(() => {
+    if (successMessage) {
+        toast.success(successMessage)
+        dispatch(messageClear())
+        setState({
+          name: "",
+          description: "",
+          discount: "",
+          price: "",
+          brand: "",
+          stock: ""
+        })
+        setImageShow([])
+        setImages([])
+        setCategory('')
+    }
+    if (errorMessage) {
+        toast.error(errorMessage)
+        dispatch(messageClear())
+    }
+}, [successMessage, errorMessage])
 
   return (
     <div className="px-2 lg:px-7 pt-5">
@@ -226,7 +252,7 @@ const AddProduct = () => {
               </div>
               <div className="flex flex-col w-full gap-1">
                 <label htmlFor="discount">Discount</label>
-                <input
+                <input 
                   min="0"
                   className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]"
                   onChange={inputHandle}
@@ -292,9 +318,11 @@ const AddProduct = () => {
               />
             </div>
             <div className="flex">
-              <button className="bg-blue-500 hover:shadow-blue-500/50 hover:shadow-lg hover:text-white rounded-md px-7 py-2 my-2">
-                Add Product
-              </button>
+                  <button disabled={loader ? true : false} className="bg-blue-500 w-[190px] hover:shadow-blue-500/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3">
+                  {
+                    loader ? <PropagateLoader color='#fff' cssOverride={overrideStyle} /> : ('Add Product')
+                  }
+                  </button>
             </div>
           </form>
         </div>

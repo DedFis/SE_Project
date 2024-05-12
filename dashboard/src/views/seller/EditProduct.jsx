@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getCategory } from "../../store/Reducers/categoryReducer";
+import { getProduct, messageClear, updateProduct, product_image_update } from "../../store/Reducers/productReducer";
 import { BsImages } from "react-icons/bs";
 import { IoCloseSharp } from "react-icons/io5";
+import { PropagateLoader } from "react-spinners";
+import { overrideStyle } from "../../utils/utils";
+import toast from 'react-hot-toast'
 
 const EditProduct = () => {
-  const categorys = [
-    {
-      id: 1,
-      name: "Fish",
-    },
-    {
-      id: 2,
-      name: "Shrimp",
-    },
-    {
-      id: 3,
-      name: "Squid",
-    },
-    {
-      id: 4,
-      name: "Crab",
-    },
-    {
-      id: 5,
-      name: "Lobster",
-    },
-  ];
+  const {productId} = useParams()
+  const dispatch = useDispatch();
+  const {categorys} = useSelector(state => state.category)
+  const {product, loader, errorMessage, successMessage} = useSelector(state => state.product)
+
+  useEffect(() => {
+    dispatch(getCategory({
+      searchValue: '',
+      parPage: '',
+      page: ""
+    }))
+  }, [])
 
   const [state, setState] = useState({
     name: "",
@@ -42,6 +38,10 @@ const EditProduct = () => {
       [e.target.name]: e.target.value,
     });
   };
+
+  useEffect(() => {
+    dispatch(getProduct(productId))
+  }, [productId])
 
   const [cateShow, setCateShow] = useState(false);
   const [category, setCategory] = useState("");
@@ -60,32 +60,62 @@ const EditProduct = () => {
       setAllCategory(categorys);
     }
   };
-  const [images, setImages] = useState([]);
+
   const [imageShow, setImageShow] = useState([]);
 
   const changeImage = (img, files) => {
     if (files.length > 0) {
-      console.log(img);
-      console.log(files[0]);
+      dispatch(product_image_update({
+        oldImage: img,
+        newImage: files[0],
+        productId
+      }))
     }
   };
 
   useEffect(() => {
     setState({
-      name: "Tuna",
-      description: "Tuna",
-      discount: "10",
-      price: "100",
-      brand: "LiveSeafood31",
-      stock: "20",
-    });
-    setCategory("Fish");
-    setImageShow([
-      `http://localhost:3000/images/duck.jpg`,
-      `http://localhost:3000/images/duck.jpg`,
-      `http://localhost:3000/images/duck.jpg`,
-    ]);
-  }, []);
+      name: product.name,
+      description: product.description,
+      discount: product.discount,
+      price: product.price,
+      brand: product.brand,
+      stock: product.stock,
+    })
+    setCategory(product.category)
+    setImageShow(product.images);
+  }, [product]);
+
+  useEffect(() => {
+    if(categorys.length > 0){
+      setAllCategory(categorys)
+    }
+  }, [categorys]);
+
+  useEffect(() => {
+    if (successMessage) {
+        toast.success(successMessage)
+        dispatch(messageClear())
+    }
+    if (errorMessage) {
+        toast.error(errorMessage)
+        dispatch(messageClear())
+    }
+}, [successMessage, errorMessage])
+
+const update = (e) => {
+  e.preventDefault()
+  const obj = {
+          name: state.name,
+          description: state.description,
+          discount: state.discount,
+          price: state.price,
+          brand: state.brand,
+          stock: state.stock,
+          productId: productId
+  }
+  dispatch(updateProduct(obj))
+}
 
   return (
     <div className="px-2 lg:px-7 pt-5">
@@ -102,7 +132,7 @@ const EditProduct = () => {
           </Link>
         </div>
         <div>
-          <form>
+          <form onSubmit={update}>
             <div className="flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]">
               <div className="flex flex-col w-full gap-1">
                 <label htmlFor="name">Product name</label>
@@ -158,7 +188,7 @@ const EditProduct = () => {
                   </div>
                   <div className="pt-14"></div>
                   <div className="flex justify-start items-start flex-col h-[200px] overflow-x-scroll">
-                    {allCategory.map((c, i) => (
+                    {allCategory.length > 0 && allCategory.map((c, i) => (
                       <span
                         className={`px-4 py-2 hover:bg-indigo-500 hover:text-white hover:shadow-lg w-full cursor-pointer ${
                           category === c.name && "bg-indigo-500"
@@ -230,10 +260,10 @@ const EditProduct = () => {
               ></textarea>
             </div>
             <div className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 xs:gap-4 gap-3 s-full text-[#d0d2d6] mb-4">
-              {imageShow.map((img, i) => (
+              {(imageShow && imageShow.length > 0) && imageShow.map((img, i) => (
                 <div>
-                  <label htmlFor={i}>
-                    <img src={img} alt="" />
+                  <label className="h-[180px]" htmlFor={i}>
+                    <img className="h-full" src={img} alt="" />
                   </label>
                   <input
                     onChange={(e) => changeImage(img, e.target.files)}
@@ -245,9 +275,11 @@ const EditProduct = () => {
               ))}
             </div>
             <div className="flex">
-              <button className="bg-blue-500 hover:shadow-blue-500/50 hover:shadow-lg hover:text-white rounded-md px-7 py-2 my-2">
-                Update Product
-              </button>
+                  <button disabled={loader ? true : false} className="bg-blue-500 w-[190px] hover:shadow-blue-500/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3">
+                  {
+                    loader ? <PropagateLoader color='#fff' cssOverride={overrideStyle} /> : ('Update Product')
+                  }
+                  </button>
             </div>
           </form>
         </div>
