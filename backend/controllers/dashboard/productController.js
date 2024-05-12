@@ -18,7 +18,7 @@ class productController{
             let brand = field.brand[0];
 
             // Extract image filepaths
-            let images = files.images[0].filepath;
+            let images = files.images;
 
             name = name.trim()
             const slug = name.split(' ').join('-')
@@ -32,9 +32,11 @@ class productController{
 
             try{
                 let allImageUrl = [];
+                console.log(images.length)
 
                 for(let i = 0; i < images.length; i++){
-                    const result = await cloudinary.uploader.upload(images[i], { folder: 'products' })
+                    const result = await cloudinary.uploader.upload(images[i].filepath, { folder: 'products' })
+
                     allImageUrl = [...allImageUrl, result.url]
                 }
 
