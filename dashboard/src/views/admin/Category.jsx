@@ -17,7 +17,7 @@ const Category = () => {
   const [parPage, setParPage] = useState(5);
   const [show, setShow] = useState(false);
   const [imageShow, setImage] = useState('')
-  const { loader, successMessage, errorMessage } = useSelector(state => state.category)
+  const { loader, successMessage, errorMessage, categorys } = useSelector(state => state.category)
   const dispatch = useDispatch()
 
   const [state, setState] = useState({
@@ -102,13 +102,13 @@ const Category = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {[1, 2, 3, 4, 5].map((d, i) => (
+                  {categorys.map((d, i) => (
                     <tr key={i}>
                       <td
                         scope="row"
                         className="py-1 px-4 font-medium whitespace-nowrap"
                       >
-                        {d}
+                        {i + 1}
                       </td>
                       <td
                         scope="row"
@@ -116,7 +116,7 @@ const Category = () => {
                       >
                         <img
                           className="w-[45px] h-[45px]"
-                          src={`http://localhost:3000/images/${d}.jpg`}
+                          src={d.image}
                           alt=""
                         />
                       </td>
@@ -124,7 +124,7 @@ const Category = () => {
                         scope="row"
                         className="py-1 px-4 font-medium whitespace-nowrap"
                       >
-                        <span>Tuna</span>
+                        <span>{d.name}</span>
                       </td>
                       <td
                         scope="row"
