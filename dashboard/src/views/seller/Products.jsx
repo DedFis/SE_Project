@@ -1,13 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
 import Pagination from "../Pagination";
 import Search from "../components/Search";
+import { getProducts } from "../../store/Reducers/productReducer";
 
 const Products = () => {
+  const { products, totalProduct } = useSelector(state => state.product)
+  const dispatch = useDispatch()
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [parPage, setParPage] = useState(5);
+
+  useEffect(() => {
+    const obj = {
+      parPage : parseInt(parPage),
+      page : parseInt(currentPage),
+      searchValue
+    }
+
+    dispatch(getProducts(obj))
+  }, [searchValue, currentPage, parPage])
+
   return (
     <div className="px-2 lg:px-7 pt-5">
       <div className="w-full p-4 bg-[#283046] rounded-md">
@@ -50,13 +65,13 @@ const Products = () => {
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5].map((d, i) => (
+              {products.map((d, i) => (
                 <tr key={i}>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    {d}
+                    {i+1}
                   </td>
 
                   <td
@@ -65,7 +80,7 @@ const Products = () => {
                   >
                     <img
                       className="w-[45px] h-[45px]"
-                      src={`http://localhost:3000/images/${d}.jpg`}
+                      src={d.images[0]}
                       alt=""
                     />
                   </td>
@@ -73,37 +88,39 @@ const Products = () => {
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>Tuna</span>
+                    <span>{d?.name?.slice(0, 16)}...</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>Fish</span>
+                    <span>{d.category}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>LiveSeafood31</span>
+                    <span>{d.brand}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>$90</span>
+                    <span>{d.price}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>5%</span>
+                    {
+                      d.discount === 0 ? <span>No discount</span> : <span>${d.discount}%</span>
+                    }
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>590</span>
+                    <span>{d.stock}</span>
                   </td>
 
                   <td
@@ -112,7 +129,7 @@ const Products = () => {
                   >
                     <div className="flex justify-start items-center gap-4">
                       <Link
-                        to={`/seller/dashboard/edit-product/:productId`}
+                        to={`/seller/dashboard/edit-product/${d._id}`}
                         className="p-[6px] bg-yellow-500 rounded hover:shadow-lg hover:shadow-yellow-500/50"
                       >
                         <FaEdit />
@@ -130,7 +147,8 @@ const Products = () => {
             </tbody>
           </table>
         </div>
-        <div className="w-full flex justify-end mt-4 bottom-4 right-4">
+        {
+          totalProduct <= parPage ? "" : <div className="w-full flex justify-end mt-4 bottom-4 right-4">
           <Pagination
             pageNumber={currentPage}
             setPageNumber={setCurrentPage}
@@ -139,6 +157,7 @@ const Products = () => {
             showItem={4}
           />
         </div>
+        }
       </div>
     </div>
   );
