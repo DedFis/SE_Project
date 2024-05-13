@@ -124,8 +124,8 @@ class authControllers{
                 api_secret : process.env.api_secret,
                 secure : true
             })
-
-            const {image} = files
+            
+            const image = files.image[0]
 
             try {
                 const result = await cloudinary.uploader.upload(image.filepath, { folder: 'profile' })
