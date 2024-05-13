@@ -18,6 +18,10 @@ const adminSchema = new Schema({
         type: String,
         required: true
     },
+    images_id: {
+        type: String,
+        default: ''
+    },
     role: {
         type: String,
         default: 'admin'

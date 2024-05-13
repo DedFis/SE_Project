@@ -40,6 +40,7 @@ class authControllers{
 
     seller_login = async(req,res)=>{
         const {email, password} = req.body
+
         try {
             const seller = await sellerModel.findOne({email}).select('+password')
             if(seller){
@@ -68,7 +69,7 @@ class authControllers{
 
     seller_register = async(req, res) => {
         const {email, name, password} = req.body
-        console.log(req.body)
+
         try {
             const getUser = await sellerModel.findOne({email})
             if (getUser) {
@@ -89,7 +90,7 @@ class authControllers{
                 res.cookie('accessToken', token, {
                     expires : new Date(Date.now() +  7 * 24 * 60 * 60 * 1000)
                 })
-                responseReturn(res, 201, {token, message : 'register success'})
+                responseReturn(res, 201, {token, message : 'Register success'})
             }
         } catch(error) {
             responseReturn(res, 500, {error: 'Internal server error'})
@@ -128,14 +129,18 @@ class authControllers{
             const image = files.image[0]
 
             try {
+                let tempImgId = await sellerModel.findById(id, {images_id: 1})
                 const result = await cloudinary.uploader.upload(image.filepath, { folder: 'profile' })
+                await cloudinary.uploader.destroy(tempImgId.images_id)
+                
                 if(result){
                     await sellerModel.findByIdAndUpdate(id, {
-                        image: result.url
+                        image: result.url,
+                        images_id: result.public_id
                     })
-                    responseReturn(res, 201, {message : 'image upload success!'})
+                    responseReturn(res, 201, {message : 'Image upload success!'})
                 }else{
-                    responseReturn(res, 404, {error: 'image upload failed!'})
+                    responseReturn(res, 404, {error: 'Image upload failed!'})
                 }
             } catch (error) {
                 responseReturn(res, 500, {error: error.message})

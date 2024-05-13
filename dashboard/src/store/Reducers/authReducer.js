@@ -155,7 +155,10 @@ export const authReducer = createSlice({
     builder.addCase(get_user_info.fulfilled, (state, { payload }) => {
       state.loader = false;
       state.userInfo = payload.userInfo
-    })
+    });
+    builder.addCase(profile_image_upload.fulfilled, (state, { payload }) => {
+      state.successMessage = payload.message;
+  });
   }
 })
 

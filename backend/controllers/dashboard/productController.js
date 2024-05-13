@@ -57,7 +57,7 @@ class productController{
                     images_id: allImageId,
                     brand: brand.trim()
                 })
-                responseReturn(res, 201, {message: "product added!"})
+                responseReturn(res, 201, {message: "Product added!"})
             } catch(error){
                 responseReturn(req, 500, {error: error.message})
             }
@@ -115,7 +115,7 @@ class productController{
                 name, description, discount, price, brand, productId, stock, slug, category
             })
             const product = await productModel.findById(productId)
-            responseReturn(res, 200, {product, message: 'product update success!'})
+            responseReturn(res, 200, {product, message: 'Product update success!'})
         } catch (error) {
             responseReturn(res, 500, {error: error.message})
         }
@@ -127,8 +127,6 @@ class productController{
         form.parse(req, async(err, field, files) => {
             const {productId, oldImage} = field;
             const newImage = files.newImage[0]
-
-            console.log(oldImage)
 
             if(err){
                 responseReturn(res, 404, {error: err.message})
@@ -158,10 +156,10 @@ class productController{
                         })
     
                         const product = await productModel.findById(productId)
-                        responseReturn(res, 200, {product, message: 'product image update success!'})
+                        responseReturn(res, 200, {product, message: 'Product image update success!'})
                     }
                     else{
-                        responseReturn(res, 404, {error: 'image upload failed!'})
+                        responseReturn(res, 404, {error: 'Image upload failed!'})
                     }
                 } catch (error) {
                     responseReturn(res, 404, {error: error.message})

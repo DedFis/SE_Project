@@ -8,12 +8,14 @@ import { IoCloseSharp } from "react-icons/io5";
 import { PropagateLoader } from "react-spinners";
 import { overrideStyle } from "../../utils/utils";
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom';
 
 const EditProduct = () => {
-  const {productId} = useParams()
-  const dispatch = useDispatch();
-  const {categorys} = useSelector(state => state.category)
-  const {product, loader, errorMessage, successMessage} = useSelector(state => state.product)
+  const { productId } = useParams()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { categorys } = useSelector(state => state.category)
+  const { product, loader, errorMessage, successMessage } = useSelector(state => state.product)
 
   useEffect(() => {
     dispatch(getCategory({
@@ -116,6 +118,9 @@ const update = (e) => {
           category: category
   }
   dispatch(updateProduct(obj))
+  setTimeout(() => {
+    navigate('/seller/dashboard/products')
+  }, 1000);
 }
 
   return (
