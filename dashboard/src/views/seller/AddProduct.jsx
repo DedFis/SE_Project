@@ -70,9 +70,6 @@ const AddProduct = () => {
     }
   };
 
-  console.log(images);
-  console.log(imageShow);
-
   const changeImage = (img, index) => {
     if (img) {
       let tempUrl = imageShow;
@@ -106,7 +103,7 @@ const AddProduct = () => {
     formData.append('price', state.price)
     formData.append('brand', state.brand)
     formData.append('stock', state.stock)
-    formData.append('category', state.category)
+    formData.append('category', category)
     for(let i = 0; i < images.length; i++){
       formData.append('images', images[i])
     }

@@ -44,6 +44,10 @@ const productSchema = new Schema({
     images: {
         type: Array,
         required: true
+    },
+    images_id: {
+        type: Array,
+        required: true
     }
 }, { timestamps: true })
 

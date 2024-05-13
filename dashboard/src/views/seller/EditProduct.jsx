@@ -112,7 +112,8 @@ const update = (e) => {
           price: state.price,
           brand: state.brand,
           stock: state.stock,
-          productId: productId
+          productId: productId,
+          category: category
   }
   dispatch(updateProduct(obj))
 }
@@ -263,7 +264,7 @@ const update = (e) => {
               {(imageShow && imageShow.length > 0) && imageShow.map((img, i) => (
                 <div>
                   <label className="h-[180px]" htmlFor={i}>
-                    <img className="h-full" src={img} alt="" />
+                    <img className="h-full object-contain" src={img} alt="" />
                   </label>
                   <input
                     onChange={(e) => changeImage(img, e.target.files)}
