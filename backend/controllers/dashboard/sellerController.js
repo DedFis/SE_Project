@@ -16,7 +16,31 @@ class sellerController {
                 responseReturn(res, 200, {totalSeller, sellers})
             }
         } catch (error) {
-            
+            responseReturn(res, 500, {error: error.message})
+        }
+    }
+
+    get_seller = async(req, res) => {
+        const {sellerId} = req.params
+
+        try {
+            const seller = await sellerModel.findById(sellerId)
+            responseReturn(res, 200, {seller})
+        } catch (error) {
+            responseReturn(res, 500, {error: error.message})
+        }
+    }
+
+    seller_status_update = async(req, res) => {
+        const {sellerId, status} = req.body
+        try {
+            await sellerModel.findByIdAndUpdate(sellerId, {
+                status
+            })
+            const seller = await sellerModel.findById(sellerId)
+            responseReturn(res, 200, {seller, message: 'seller status update success!'})
+        } catch (error) {
+            responseReturn(res, 500, {error: error.message})
         }
     }
 }

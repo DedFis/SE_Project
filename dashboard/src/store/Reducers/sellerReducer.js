@@ -15,15 +15,45 @@ export const getSellerRequest = createAsyncThunk(
   }
 )
 
+export const getSeller = createAsyncThunk(
+  'seller/getSeller',
+  async (sellerId, {rejectWithValue, fulfillWithValue}) => {
+      try{
+          const {data} = await api.get(`/get-seller/${sellerId}`, {
+              withCredentials: true
+          })
+          return fulfillWithValue(data)
+      } catch (error){
+          return rejectWithValue(error.response.data)
+      }
+  }
+)
+
+export const sellerStatusUpdate = createAsyncThunk(
+  'seller/sellerStatusUpdate',
+  async (info, {rejectWithValue, fulfillWithValue}) => {
+      try{
+          const {data} = await api.post(`/seller-status-update`, info, {
+              withCredentials: true
+          })
+          console.log(data)
+          return fulfillWithValue(data)
+      } catch (error){
+          return rejectWithValue(error.response.data)
+      }
+  }
+)
+
 export const sellerReducer = createSlice({
-  name: 'category',
+  name: 'seller',
 
   initialState: {
     successMessage: '',
     errorMessage: '',
     loader: false,
     sellers: [],
-    totalSeller: 0
+    totalSeller: 0,
+    seller: ''
   },
 
   reducers: {
@@ -37,6 +67,13 @@ export const sellerReducer = createSlice({
     builder.addCase(getSellerRequest.fulfilled, (state, {payload}) => {
       state.sellers = payload.sellers
       state.totalSeller = payload.totalSeller
+    });
+    builder.addCase(getSeller.fulfilled, (state, {payload}) => {
+      state.seller = payload.seller
+    });
+    builder.addCase(sellerStatusUpdate.fulfilled, (state, {payload}) => {
+      state.seller = payload.seller
+      state.successMessage = payload.message
     });
   }
 })
