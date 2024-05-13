@@ -33,12 +33,14 @@ class productController{
 
             try{
                 let allImageUrl = [];
+                let allImageId = [];
                 console.log(images.length)
 
                 for(let i = 0; i < images.length; i++){
                     const result = await cloudinary.uploader.upload(images[i].filepath, { folder: 'products' })
 
                     allImageUrl = [...allImageUrl, result.url]
+                    allImageId = [...allImageId, result.public_id]
                 }
 
                 await productModel.create({
@@ -52,6 +54,7 @@ class productController{
                     price: parseInt(price),
                     discount: parseInt(discount),
                     images: allImageUrl,
+                    images_id: allImageId,
                     brand: brand.trim()
                 })
                 responseReturn(res, 201, {message: "product added!"})
@@ -60,6 +63,7 @@ class productController{
             }
         })
     }
+
     products_get = async(req, res) => {
         const { parPage, page, searchValue } = req.query
         const {id} = req;
@@ -93,7 +97,6 @@ class productController{
 
     product_get = async(req, res) => {
         const {productId} = req.params;
-        console.log(productId)
         try{
             const product = await productModel.findById(productId)
             responseReturn(res, 200, {product})
@@ -103,13 +106,13 @@ class productController{
     }
 
     product_update = async(req, res) => {
-        let {name, description, discount, price, brand, productId, stock} = req.body;
+        let {name, description, discount, price, brand, productId, stock, category} = req.body;
         name = name.trim()
         const slug = name.split(' ').join('-')
 
         try {
             await productModel.findByIdAndUpdate(productId, {
-                name, description, discount, price, brand, productId, stock, slug
+                name, description, discount, price, brand, productId, stock, slug, category
             })
             const product = await productModel.findById(productId)
             responseReturn(res, 200, {product, message: 'product update success!'})
@@ -123,7 +126,9 @@ class productController{
 
         form.parse(req, async(err, field, files) => {
             const {productId, oldImage} = field;
-            const {newImage} = files
+            const newImage = files.newImage[0]
+
+            console.log(oldImage)
 
             if(err){
                 responseReturn(res, 404, {error: err.message})
@@ -139,12 +144,17 @@ class productController{
                     const result = await cloudinary.uploader.upload(newImage.filepath, { folder: 'products' })  
     
                     if(result){
-                        let {images} = await productModel.findById(productId)
-                        const index = images.findIndex(img=>img === oldImage)
+                        let { images } = await productModel.findById(productId, { images: 1 })
+                        let { images_id } = await productModel.findById(productId, { images_id: 1 })
+
+                        const index = images.findIndex(image => image === oldImage[0])
+                        await cloudinary.uploader.destroy(images_id[index])
+
                         images[index] = result.url;
+                        images_id[index] = result.public_id;
     
                         await productModel.findByIdAndUpdate(productId, {
-                            images
+                            images, images_id
                         })
     
                         const product = await productModel.findById(productId)

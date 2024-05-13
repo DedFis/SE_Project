@@ -79,7 +79,7 @@ const Products = () => {
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
                     <img
-                      className="w-[45px] h-[45px]"
+                      className="w-[45px] h-[45px] object-contain"
                       src={d.images[0]}
                       alt=""
                     />
