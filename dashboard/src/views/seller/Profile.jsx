@@ -2,8 +2,9 @@ import React from "react";
 import { BsImages } from "react-icons/bs";
 import { FadeLoader } from "react-spinners";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { profile_image_upload } from "../../store/Reducers/authReducer";
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const dispatch = useDispatch()
@@ -11,12 +12,14 @@ const Profile = () => {
   const image = true;
   const loader = false;
   const status = "active";
+  const navigate = useNavigate()
 
   const addImage = (e) => {
     if(e.target.files.length > 0){
       const formData = new FormData()
       formData.append('image', e.target.files[0])
       dispatch(profile_image_upload(formData))
+      navigate(0)
     }
   }
   
