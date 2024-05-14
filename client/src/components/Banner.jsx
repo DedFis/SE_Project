@@ -38,8 +38,8 @@ const Banner = () => {
                                 responsive={responsive}
                             >
                                 {
-                                    [1,2,3,4,5,6,7].map((b, i) => <Link className='lg-md:h-[440px] h-auto w-full block' key={i} to='#'>
-                                        <img src={b.banner} alt="" />
+                                    [1,2,3,4].map((b, i) => <Link className='lg-md:h-[440px] h-auto w-full block' key={i} to='#'>
+                                        <img src={`http://localhost:3000/images/banner/${b}.png`} alt="" />
                                     </Link>)
                                 }
                             </Carousel>
