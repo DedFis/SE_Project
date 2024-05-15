@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, redirect } from 'react-router-dom'
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import Headers from '../components/Headers'
 import Footer from '../components/Footer'
@@ -9,24 +9,21 @@ import { useSelector, useDispatch } from 'react-redux'
 // import { get_card_products, delete_card_product, messageClear, quantity_inc, quantity_dec } from '../store/reducers/cardReducer'
 
 const Card = () => {
-
+    const navigate = useNavigate()
     const card_products = [1, 2]
     const outOfStockProduct = [1, 2]
+    const redirect = () => {
+        navigate('/shipping', {
+            state: {
+                products: card_products,
+                price: 500,
+                shipping_fee: 343,
+                items: 4
+            }
+        })
+    }
     // const dispatch = useDispatch()
-    // const navegate = useNavigate()
-    // const { userInfo } = useSelector(state => state.auth)
-    // const { card_products, successMessage, price, buy_product_item, shipping_fee, outofstock_products } = useSelector(state => state.card)
-
-    // const redirect = () => {
-    //     navegate('/shipping', {
-    //         state: {
-    //             products: card_products,
-    //             price: price,
-    //             shipping_fee: shipping_fee,
-    //             items: buy_product_item
-    //         }
-    //     })
-    // }
+    
     // useEffect(() => {
     //     dispatch(get_card_products(userInfo.id))
     // }, [])
@@ -176,7 +173,7 @@ const Card = () => {
                                                 <span>Total</span>
                                                 <span className='text-lg text-orange-500'>$34</span>
                                             </div>
-                                            <button className='px-5 py-[6px] rounded-sm hover:shadow-orange-500/20 hover:shadow-lg bg-orange-500 text-sm text-white uppercase'>Proceed to checkout 4</button>
+                                            <button onClick={redirect} className='px-5 py-[6px] rounded-sm hover:shadow-orange-500/20 hover:shadow-lg bg-orange-500 text-sm text-white uppercase'>Proceed to checkout 4</button>
                                         </div>
                                     }
                                 </div>
