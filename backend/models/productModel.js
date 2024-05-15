@@ -48,6 +48,10 @@ const productSchema = new Schema({
     images_id: {
         type: Array,
         required: true
+    },
+    rating: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true })
 

@@ -3,11 +3,8 @@ import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 import {FiChevronRight,FiChevronLeft} from 'react-icons/fi'
 import { Link } from 'react-router-dom'
-const Products = ({title}) => {
-    const products = [
-        [1, 2, 3],
-        [4, 5, 6]
-    ]
+const Products = ({title, products}) => {
+    
     
     const responsive = {
         superLargeDesktop: {
@@ -59,11 +56,11 @@ const Products = ({title}) => {
                         return (
                             <div key={i} className='flex flex-col justify-start gap-2'>
                                 {
-                                    p.map((pl) => <Link className='flex justify-start items-start' to='#'>
-                                        <img className='w-[110px] h-[110px]' src={`http://localhost:3000/images/product/${pl}.jpg`} alt="images" />
+                                    p.map((pl, j) => <Link key={j} className='flex justify-start items-start' to='#'>
+                                        <img className='w-[110px] h-[110px]' src={pl.images[0]} alt="images" />
                                         <div className='px-3 flex justify-start items-start gap-1 flex-col text-slate-600'>
-                                            <h2>Ikan</h2>
-                                            <span className='text-lg font-bold'>$230</span>
+                                            <h2>{pl.name}</h2>
+                                            <span className='text-lg font-bold'>${pl.price}</span>
                                         </div>
                                     </Link>)
                                 }

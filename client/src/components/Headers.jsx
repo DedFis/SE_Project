@@ -5,14 +5,14 @@ import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 import { FaLinkedinIn, FaFacebookF, FaUser, FaLock, FaList } from 'react-icons/fa'
 import { AiOutlineTwitter, AiFillGithub, AiFillHeart, AiFillShopping } from 'react-icons/ai'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useSelector } from "react-redux";
 
 const Headers = () => {
     const user = true
     const wishlist = 5
-    const categorys = [
-        'Clothing',
-        'Sports'
-    ]
+
+    const {categorys} = useSelector(state => state.home)
+    
     const { pathname } = useLocation()
     const [showShidebar, setShowShidebar] = useState(true);
     const [categoryShow, setCategoryShow] = useState(true)
@@ -208,7 +208,7 @@ const Headers = () => {
                                             return (
                                                 <li key={i} className='flex justify-start items-center gap-2 px-[24px] py-[6px]'>
                                                     <img src={c.image} className='w-[30px] h-[30px] rounded-full overflow-hidden' alt={c.name} />
-                                                    <Link to={`/products?category=${c.name}`} className='text-sm block'>{c.name}</Link>
+                                                    <Link to={`/product/${c.slug}`} className='text-sm block'>{c.name}</Link>
                                                 </li>
                                             )
                                         })
