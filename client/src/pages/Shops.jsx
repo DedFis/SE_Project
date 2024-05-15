@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Range } from 'react-range'
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
@@ -11,19 +11,27 @@ import { BsFillGridFill } from 'react-icons/bs'
 import { FaThList } from 'react-icons/fa'
 import ShopProducts from '../components/products/ShopProducts'
 import Pagination from '../components/Pagination'
-// import { price_range_product, query_products } from '../store/reducers/homeReducer'
-// import { useDispatch, useSelector } from 'react-redux'
+import { price_range_product } from '../store/reducers/homeReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Shops = () => {
+    const {products, latest_product, categorys, priceRange} = useSelector(state => state.home)
+    const dispatch = useDispatch()
     const [filter, setFilter] = useState(true)
-    const categorys = [
-        'Clothing',
-        'Sports'
-    ]
-    const [state, setState] = useState({ values: [50, 2000] })
+    const [state, setState] = useState({ values: [1, 100] })
     const [styles, setStyles] = useState('grid')
     const [pageNumber, setPageNumber] = useState(1)
     const [parPage, setParPage] = useState(3)
+
+    useEffect(() => {
+        dispatch(price_range_product())
+    }, [])
+
+    useEffect(() => {
+        setState({
+            values: [priceRange.low, priceRange.high]
+        })
+    }, [priceRange])
 
     return ( 
         <div>
@@ -53,8 +61,8 @@ const Shops = () => {
                             <div className='py-2'>
                                 {
                                     categorys.map((c, i) => <div className='flex justify-start items-center gap-2 py-1' key={i}>
-                                        <input type="checkbox" id={c} />
-                                        <label className='text-slate-600 block cursor-pointer' htmlFor={c}>{c}</label>
+                                        <input type="checkbox" id={c.name} />
+                                        <label className='text-slate-600 block cursor-pointer' htmlFor={c.name}>{c.name}</label>
                                     </div>)
                                 }
                             </div>
@@ -62,8 +70,8 @@ const Shops = () => {
                                 <h2 className='text-3xl font-bold mb-3 text-slate-600'>Price</h2>
                                 <Range
                                     step={5}
-                                    min={50}
-                                    max={2000}
+                                    min={priceRange.low}
+                                    max={priceRange.high}
                                     values={state.values}
                                     onChange={(values) => setState({ values })}
                                     renderTrack={({ props, children }) => (
@@ -128,7 +136,7 @@ const Shops = () => {
                                 </div>
                             </div>
                             <div className='py-5 flex flex-col gap-4 md:hidden'>
-                                <Products title="Latest Products" />
+                                {/* <Products title="Latest Products" /> */}
                             </div>
                         </div>
                         <div className='w-9/12 md-lg:w-8/12 md:w-full'>
