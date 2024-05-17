@@ -39,7 +39,7 @@ const Banner = () => {
                             >
                                 {
                                     [1,2,3,4].map((b, i) => <Link className='lg-md:h-[440px] h-auto w-full block' key={i} to='#'>
-                                        <img src={`http://localhost:3000/images/banner/${b}.png`} alt="" />
+                                        <img className="mx-auto" src={`http://localhost:3000/images/banner/${b}.png`} alt="" />
                                     </Link>)
                                 }
                             </Carousel>

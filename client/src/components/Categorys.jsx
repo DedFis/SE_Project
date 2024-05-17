@@ -38,7 +38,12 @@ const Categorys = () => {
     }
     return (
         <div className='w-[87%] mx-auto relative'>
-
+            <div className='w-full'>
+                <div className='text-center flex justify-center items-center flex-col text-4xl text-slate-600 font-bold relative pb-[45px]'>
+                    <h2>Categories</h2>
+                    <div className='w-[100px] h-[4px] bg-[#46c6c7] mt-4'></div>
+                </div>
+            </div>
             <Carousel
                 autoPlay={true}
                 infinite={true}
@@ -47,7 +52,7 @@ const Categorys = () => {
                 transitionDuration={500}
             >
                 {
-                    categorys.map((c, i) => <Link className='h-[185px] border block' key={i} to='#'>
+                    categorys.map((c, i) => <Link className='h-[185px] border block mr-4' key={i} to='#'>
                         <div className='w-full h-full relative p-3'>
                             <img src={c.image} alt="image" />
                             <div className='absolute bottom-6 w-full mx-auto font-bold left-0 flex justify-center items-center'>
