@@ -17,12 +17,8 @@ const Footer = () => {
             <div className='w-[85%] flex flex-wrap mx-auto border-b py-16 md-lg:pb-10 sm:pb-6'>
                 <div className='w-3/12 lg:w-4/12 sm:w-full'>
                     <div className='flex flex-col gap-3'>
-                        <img className='w-[190px] h-[70x]' src="http://localhost:3000/images/logo.png" alt="logo" />
-                        <ul className='flex flex-col gap-2 text-slate-600'>
-                            <li>Address : Rangpur , Kuigram</li>
-                            <li>Phone : 5873458345</li>
-                            <li>Email : farid@gmail.com</li>
-                        </ul>
+                        <img className='w-[190px] h-[10x]' src="http://localhost:3000/images/ikan.png" alt="logo" />
+                        
                     </div>
                 </div>
                 <div className='w-5/12 lg:w-8/12 sm:w-full'>
@@ -43,26 +39,11 @@ const Footer = () => {
                                     <li>
                                         <Link>Privacy Policy</Link>
                                     </li>
-                                    <li>
-                                        <Link>Blogs</Link>
-                                    </li>
                                 </ul>
                                 <ul className='flex flex-col gap-2 text-slate-600 text-sm'>
-                                    <li>
-                                        <Link>About Us</Link>
-                                    </li>
-                                    <li>
-                                        <Link>About our Shop</Link>
-                                    </li>
-                                    <li>
-                                        <Link>Delivery Information</Link>
-                                    </li>
-                                    <li>
-                                        <Link>Privacy Policy</Link>
-                                    </li>
-                                    <li>
-                                        <Link>Blogs</Link>
-                                    </li>
+                                    <li>Address : Jakarta Barat, Indonesia</li>
+                                    <li>Phone : 0888888888</li>
+                                    <li>Email : tangkaplaut01@gmail.com</li>
                                 </ul>
                             </div>
                         </div>
@@ -70,7 +51,7 @@ const Footer = () => {
                 </div>
                 <div className='w-4/12 lg:w-full lg:mt-6'>
                     <div className='w-full flex flex-col justify-start gap-5'>
-                        <h2 className='font-bold text-lg mb-2'>Join Our</h2>
+                        <h2 className='font-bold text-lg mb-2'>Join Us as Seller!</h2>
                         <span>Get Email updates about our latest and shop specials offers</span>
                         <div className='h-[50px] w-full bg-white border relative'>
                             <input placeholder='Enter your mail' className='h-full bg-transparent w-full px-3 outline-0' type="text" />

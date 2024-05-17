@@ -28,23 +28,23 @@ const Headers = () => {
                         <ul className='flex justify-start items-center gap-8'>
                             <li className='flex relative justify-center items-center gap-2 text-sm after:absolute after:h-[18px] after:w-[1px] after:bg-[#afafaf] after:-right-[16px]'>
                                 <span><GrMail /></span>
-                                <span>sheikhfarid@gmail.com</span>
+                                <span>dummy@gmail.com</span>
                             </li>
-                            <span>Multi vendor ecommerce</span>
+                            <span>TangkapanLaut.com</span>
                         </ul>
                         <div>
                             <div className='flex justify-center items-center gap-10'>
-                                <div className='flex justify-center items-center gap-4'>
+                                {/* <div className='flex justify-center items-center gap-4'>
                                     <a href="#"><FaFacebookF /></a>
                                     <a href="#"><AiOutlineTwitter /></a>
                                     <a href="#"><FaLinkedinIn /></a>
                                     <a href="#"><AiFillGithub /></a>
-                                </div>
+                                </div> */}
                                 <div className='flex group cursor-pointer text-slate-800 text-sm justify-center items-center gap-1 relative after:h-[18px] after:w-[1px] after:bg-[#afafaf] after:-right-[16px] after:absolute before:absolute before:h-[18px] before:bg-[#afafaf] before:w-[1px] before:-left-[20px]'>
                                     <img src="http://localhost:3000/images/language.png" alt="" />
                                     <span><MdOutlineKeyboardArrowDown /></span>
                                     <ul className='absolute invisible transition-all to-12 rounded-sm duration-200 text-white p-2 w-[100px] flex flex-col gap-3 group-hover:visible group-hover:top-6 group-hover:bg-black z-10'>
-                                        <li>Bangla</li>
+                                        <li>Bahasa</li>
                                         <li>English</li>
                                     </ul>
                                 </div>
@@ -68,7 +68,7 @@ const Headers = () => {
                         <div className='md-lg:w-full w-3/12 md-lg:pt-4'>
                             <div className='flex justify-between items-center'>
                                 <Link to='/'>
-                                    <img src="http://localhost:3000/images/logo.png" alt="logo" />
+                                    <img className='w-[100px]' src="http://localhost:3000/images/ikan.png" alt="logo" />
                                 </Link>
                                 <div className='justify-center items-center w-[30px] h-[30px] bg-white text-slate-600 border border-slate-600 rounded-sm cursor-pointer lg:hidden md-lg:flex xl:hidden hidden' onClick={() => setShowShidebar(false)}>
                                     <span><FaList /></span>
@@ -79,14 +79,14 @@ const Headers = () => {
                             <div className='flex justify-between md-lg:justify-center items-center flex-wrap pl-8'>
                                 <ul className='flex justify-start items-start gap-8 text-sm font-bold uppercase md-lg:hidden'>
                                     <li>
-                                        <Link className={`p-2 block ${pathname === '/' ? 'text-[#7fad39]' : 'text-slate-600'}`}>Home</Link>
+                                        <Link className={`p-2 block ${pathname === '/' ? 'text-[#46c6c7]' : 'text-slate-600'}`}>Home</Link>
                                     </li>
                                     <li>
                                         <Link to='/shops' className={`p-2 block ${pathname === '/shop' ? 'text-[#7fad39]' : 'text-slate-600'}`}>Shop</Link>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <Link className={`p-2 block ${pathname === '/blog' ? 'text-[#7fad39]' : 'text-slate-600'}`}>Blog</Link>
-                                    </li>
+                                    </li> */}
                                     <li>
                                         <Link className={`p-2 block ${pathname === '/about' ? 'text-[#7fad39]' : 'text-slate-600'}`}>About</Link>
                                     </li>
@@ -127,7 +127,7 @@ const Headers = () => {
                 <div className={`w-[300px] z-[9999] transition-all duration-200 fixed  ${showShidebar ? '-left-[300px]' : 'left-0'} top-0 overflow-y-auto bg-white h-screen py-6 px-8`}>
                     <div className='flex justify-start flex-col gap-6'>
                         <Link to='/'>
-                            <img src="http://localhost:3000/images/logo.png" alt="logo" />
+                            <img src="http://localhost:3000/images/ikan.png" alt="logo" />
                         </Link>
                         <div className='flex justify-star items-center gap-10'>
                             <div className='flex group cursor-pointer text-slate-800 text-sm justify-center items-center gap-1 relative after:h-[18px] after:w-[1px] after:bg-[#afafaf] after:-right-[16px] after:absolute'>
@@ -176,16 +176,16 @@ const Headers = () => {
                                 <span><IoIosCall /></span>
                             </div>
                             <div className='flex justify-end flex-col gap-1'>
-                                <h2 className='text-sm font-medium text-slate-700'>+8803242343243</h2>
-                                <span className='text-xs'>support 33/45 time</span>
+                                <h2 className='text-sm font-medium text-slate-700'>+888888888</h2>
+                                <span className='text-xs'>support 15/7</span>
                             </div>
                         </div>
                         <ul className='flex flex-col justify-start items-start gap-3 text-[#1c1c1c]'>
                             <li className='flex justify-start items-center gap-2  text-sm'>
                                 <span><GrMail /></span>
-                                <span>learnwithproject@gmail.com</span>
+                                <span>TangkapanLaut.com</span>
                             </li>
-                            <span className='text-sm'>Multi vendor ecommerce</span>
+                            <span className='text-sm'>TangkapanLaut.com</span>
                         </ul>
                     </div>
                 </div>
@@ -194,7 +194,7 @@ const Headers = () => {
                 <div className='flex w-full flex-wrap md-lg:gap-8'>
                     <div className='w-3/12 md-lg:w-full'>
                         <div className='bg-white relative'>
-                            <div onClick={() => setCategoryShow(!categoryShow)} className='h-[50px] bg-violet-400 text-white flex justify-center md-lg:justify-between md-lg:px-6 items-center gap-3 font-bold text-md cursor-pointer'>
+                            <div onClick={() => setCategoryShow(!categoryShow)} className='h-[50px] bg-[#46c6c7] text-white flex justify-center md-lg:justify-between md-lg:px-6 items-center gap-3 font-bold text-md cursor-pointer'>
                                 <div className="flex justify-center items-center gap-3">
                                     <span><FaList /></span>
                                     <span>All Category</span>
@@ -230,7 +230,7 @@ const Headers = () => {
                                         </select>
                                     </div>
                                     <input className='w-full relative bg-transparent text-slate-500 outline-0 px-3 h-full' type="text" name="" id="" placeholder='what do you need' />
-                                    <button className='bg-violet-400 right-0 absolute px-8 h-full font-semibold uppercase text-white'>Search</button>
+                                    <button className='bg-[#46c6c7] right-0 absolute px-8 h-full font-semibold uppercase text-white'>Search</button>
                                 </div>
                             </div>
                             <div className='w-4/12 block md-lg:hidden pl-2 md-lg:w-full md-lg:pl-0'>
