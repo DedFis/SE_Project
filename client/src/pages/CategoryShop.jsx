@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Range } from 'react-range'
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import Headers from '../components/Headers'
@@ -14,41 +14,34 @@ import Pagination from '../components/Pagination'
 import { price_range_product, query_products } from '../store/reducers/homeReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
-const Shops = () => {
-    const {products, totalProduct, latest_product, categorys, priceRange} = useSelector(state => state.home)
+const CategoryShops = () => {
+
+    let [searchParams, setSearchParams] = useSearchParams()
+    const category = searchParams.get('category')
+    const { products, totalProduct, latest_product, priceRange, parPage } = useSelector(state => state.home)
+
     const dispatch = useDispatch()
-    const [filter, setFilter] = useState(true)
-    const [state, setState] = useState({ values: [1, 100] })
-    const [styles, setStyles] = useState('grid')
     const [pageNumber, setPageNumber] = useState(1)
-    const [parPage, setParPage] = useState(3)
-    const [category, setCategory] = useState('')
+    const [styles, setStyles] = useState('grid')
+    const [filter, setFilter] = useState(true)
+    const [state, setState] = useState({ values: [priceRange.low, priceRange.high] })
     const [rating, setRatingQ] = useState('')
     const [sortPrice, setSortPrice] = useState('')
 
     useEffect(() => {
         dispatch(price_range_product())
     }, [])
-
     useEffect(() => {
         setState({
             values: [priceRange.low, priceRange.high]
         })
     }, [priceRange])
 
-    const queryCategory = (e, value) => {
-        if (e.target.checked) {
-            setCategory(value)
-        } else {
-            setCategory('')
-        }
-    }
-
     useEffect(() => {
         dispatch(
             query_products({
-                low: state.values[0],
-                high: state.values[1],
+                low: state.values[0] || '',
+                high: state.values[1] || '',
                 category,
                 rating,
                 sortPrice,
@@ -68,11 +61,10 @@ const Shops = () => {
             pageNumber
         }))
     }
-
-    return ( 
+    return (
         <div>
             <Headers />
-            <section className='bg-[url("http://localhost:3000/images/banner/1.png")] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left'>
+            <section className='bg-[url("http://localhost:3000/images/banner/shop.gif")] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left'>
                 <div className='absolute left-0 top-0 w-full h-full bg-[#2422228a]'>
                     <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
                         <div className='flex flex-col justify-center gap-1 items-center h-full w-full text-white'>
@@ -93,15 +85,6 @@ const Shops = () => {
                     </div>
                     <div className='w-full flex flex-wrap'>
                         <div className={`w-3/12 md-lg:w-4/12 md:w-full pr-8 ${filter ? 'md:h-0 md:overflow-hidden md:mb-6' : 'md:h-auto md:overflow-auto md:mb-0'}`}>
-                            <h2 className='text-3xl font-bold mb-3 text-slate-600'>Category</h2>
-                            <div className='py-2'>
-                                {
-                                    categorys.map((c, i) => <div className='flex justify-start items-center gap-2 py-1' key={i}>
-                                        <input checked={category === c.name ? true : false} onChange={(e) => queryCategory(e, c.name)} type="checkbox" id={c.name} />
-                                        <label className='text-slate-600 block cursor-pointer' htmlFor={c.name}>{c.name}</label>
-                                    </div>)
-                                }
-                            </div>
                             <div className='py-2 flex flex-col gap-5'>
                                 <h2 className='text-3xl font-bold mb-3 text-slate-600'>Price</h2>
                                 <Range
@@ -155,8 +138,15 @@ const Shops = () => {
                                         <span><CiStar /></span>
                                         <span><CiStar /></span>
                                     </div>
-                                    <div onClick={resetRating} className='text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer'>
+                                    <div onClick={() => setRatingQ(1)} className='text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer'>
                                         <span><AiFillStar /></span>
+                                        <span><CiStar /></span>
+                                        <span><CiStar /></span>
+                                        <span><CiStar /></span>
+                                        <span><CiStar /></span>
+                                    </div>
+                                    <div onClick={resetRating} className='text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer'>
+                                        <span><CiStar /></span>
                                         <span><CiStar /></span>
                                         <span><CiStar /></span>
                                         <span><CiStar /></span>
@@ -171,7 +161,7 @@ const Shops = () => {
                         <div className='w-9/12 md-lg:w-8/12 md:w-full'>
                             <div className='pl-8 md:pl-0'>
                                 <div className='py-4 bg-white mb-10 px-3 rounded-md flex justify-between items-start border'>
-                                    <h2 className='text-lg font-medium text-slate-600'>12 Products</h2>
+                                    <h2 className='text-lg font-medium text-slate-600'>{totalProduct} Products</h2>
                                     <div className='flex justify-center items-center gap-3'>
                                         <select onChange={(e) => setSortPrice(e.target.value)} className='p-1 border outline-0 text-slate-600 font-semibold' name="" id="">
                                             <option value="">Sort By</option>
@@ -193,7 +183,7 @@ const Shops = () => {
                                 </div>
                                 <div>
                                     {
-                                        totalProduct > parPage && <Pagination pageNumber={pageNumber} setPageNumber={setPageNumber} totalItem={totalProduct} parPage={parPage} showItem={Math.floor(totalProduct/parPage)+1} />    
+                                        totalProduct > parPage && <Pagination pageNumber={pageNumber} setPageNumber={setPageNumber} totalItem={totalProduct} parPage={parPage} showItem={Math.floor(totalProduct / parPage)} />
                                     }
                                 </div>
                             </div>
@@ -203,7 +193,7 @@ const Shops = () => {
             </section>
             <Footer />
         </div>
-    );
+    )
 }
- 
-export default Shops;
+
+export default CategoryShops
