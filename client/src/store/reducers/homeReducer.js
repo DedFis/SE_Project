@@ -136,7 +136,7 @@ export const homeReducer = createSlice({
         categorys: [],
         products: [],
         totalProduct: 0,
-        // parPage: 4,
+        parPage: 4,
         latest_product: [],
         topRated_product: [],
         discount_product: [],
@@ -177,6 +177,7 @@ export const homeReducer = createSlice({
         builder.addCase(query_products.fulfilled, (state, {payload}) => {
             state.products = payload.products
             state.totalProduct = payload.totalProduct
+            state.parPage = payload.parPage
         });
         // [get_category.fulfilled]: (state, {
         //     payload

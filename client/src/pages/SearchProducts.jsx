@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Range } from "react-range";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import Headers from "../components/Headers";
@@ -17,49 +17,37 @@ import {
 } from "../store/reducers/homeReducer";
 import { useDispatch, useSelector } from "react-redux";
 
-const Shops = () => {
-  const {
-    products,
-    totalProduct,
-    latest_product,
-    categorys,
-    priceRange,
-    parPage,
-  } = useSelector((state) => state.home);
+const SearchProducts = () => {
+  let [searchParams, setSearchParams] = useSearchParams();
+  const category = searchParams.get("category");
+  const searchValue = searchParams.get("value");
+  const { products, totalProduct, latest_product, priceRange, parPage } =
+    useSelector((state) => state.home);
+
   const dispatch = useDispatch();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [styles, setStyles] = useState("grid");
   const [filter, setFilter] = useState(true);
   const [state, setState] = useState({
     values: [priceRange.low, priceRange.high],
   });
-  const [styles, setStyles] = useState("grid");
-  const [pageNumber, setPageNumber] = useState(1);
-  const [category, setCategory] = useState("");
   const [rating, setRatingQ] = useState("");
   const [sortPrice, setSortPrice] = useState("");
 
   useEffect(() => {
     dispatch(price_range_product());
   }, []);
-
   useEffect(() => {
     setState({
       values: [priceRange.low, priceRange.high],
     });
   }, [priceRange]);
 
-  const queryCategory = (e, value) => {
-    if (e.target.checked) {
-      setCategory(value);
-    } else {
-      setCategory("");
-    }
-  };
-
   useEffect(() => {
     dispatch(
       query_products({
-        low: state.values[0],
-        high: state.values[1],
+        low: state.values[0] || "",
+        high: state.values[1] || "",
         category,
         rating,
         sortPrice,
@@ -73,6 +61,7 @@ const Shops = () => {
     rating,
     pageNumber,
     sortPrice,
+    searchValue,
   ]);
 
   const resetRating = () => {
@@ -88,11 +77,10 @@ const Shops = () => {
       })
     );
   };
-
   return (
     <div>
       <Headers />
-      <section className='bg-[url("http://localhost:3000/images/banner/1.png")] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left'>
+      <section className='bg-[url("http://localhost:3000/images/banner/shop.gif")] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left'>
         <div className="absolute left-0 top-0 w-full h-full bg-[#2422228a]">
           <div className="w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto">
             <div className="flex flex-col justify-center gap-1 items-center h-full w-full text-white">
@@ -126,30 +114,6 @@ const Shops = () => {
                   : "md:h-auto md:overflow-auto md:mb-0"
               }`}
             >
-              <h2 className="text-3xl font-bold mb-3 text-slate-600">
-                Category
-              </h2>
-              <div className="py-2">
-                {categorys.map((c, i) => (
-                  <div
-                    className="flex justify-start items-center gap-2 py-1"
-                    key={i}
-                  >
-                    <input
-                      checked={category === c.name ? true : false}
-                      onChange={(e) => queryCategory(e, c.name)}
-                      type="checkbox"
-                      id={c.name}
-                    />
-                    <label
-                      className="text-slate-600 block cursor-pointer"
-                      htmlFor={c.name}
-                    >
-                      {c.name}
-                    </label>
-                  </div>
-                ))}
-              </div>
               <div className="py-2 flex flex-col gap-5">
                 <h2 className="text-3xl font-bold mb-3 text-slate-600">
                   Price
@@ -268,11 +232,31 @@ const Shops = () => {
                     </span>
                   </div>
                   <div
-                    onClick={resetRating}
+                    onClick={() => setRatingQ(1)}
                     className="text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer"
                   >
                     <span>
                       <AiFillStar />
+                    </span>
+                    <span>
+                      <CiStar />
+                    </span>
+                    <span>
+                      <CiStar />
+                    </span>
+                    <span>
+                      <CiStar />
+                    </span>
+                    <span>
+                      <CiStar />
+                    </span>
+                  </div>
+                  <div
+                    onClick={resetRating}
+                    className="text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer"
+                  >
+                    <span>
+                      <CiStar />
                     </span>
                     <span>
                       <CiStar />
@@ -354,4 +338,4 @@ const Shops = () => {
   );
 };
 
-export default Shops;
+export default SearchProducts;

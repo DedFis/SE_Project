@@ -7,8 +7,8 @@ const Pagination = ({pageNumber, setPageNumber, totalItem, parPage, showItem}) =
 
     let dif = totalPage - pageNumber;
 
-    if(dif <= showItem){
-        startPage = totalPage - showItem
+    if(showItem > 6){
+        showItem = 5
     }
 
     let endPage = startPage < 0 ? showItem : showItem + startPage
