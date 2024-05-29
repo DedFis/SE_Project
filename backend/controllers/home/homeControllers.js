@@ -91,6 +91,7 @@ class homeControllers{
     query_products = async (req, res) => {
         const parPage = 12
         req.query.parPage = parPage
+        console.log(req.query)
         try {
             const products = await productModel.find({}).sort({
                 createdAt: -1
