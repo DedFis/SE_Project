@@ -1,9 +1,43 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AiFillHeart, AiOutlineShoppingCart } from 'react-icons/ai'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FaEye } from 'react-icons/fa'
+import { add_to_card, messageClear } from "../../store/reducers/cardReducer";
+import toast from "react-hot-toast";
 import Ratings from '../Ratings'
+import { useDispatch, useSelector } from "react-redux";
+
 const ShopProducts = ({ styles, products }) => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { userInfo } = useSelector((state) => state.auth);
+    const { successMessage, errorMessage } = useSelector((state) => state.card);
+
+    const add_card = (id) => {
+        if (userInfo) {
+            dispatch(
+                add_to_card({
+                    userId: userInfo.id,
+                    quantity: 1,
+                    productId: id,
+                })
+            );
+        } else {
+            navigate("/login");
+        }
+    };
+
+    useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage);
+            dispatch(messageClear());
+        }
+        if (errorMessage) {
+            toast.error(errorMessage);
+            dispatch(messageClear());
+        }
+    }, [errorMessage, successMessage]);
+
     return (
         <div className={`w-full grid ${styles === 'grid' ? 'grid-cols-3 md-lg:grid-cols-2 md:grid-cols-2' : 'grid-cols-1 md-lg:grid-cols-2 md:grid-cols-2'} gap-3`}>
             {
@@ -13,7 +47,7 @@ const ShopProducts = ({ styles, products }) => {
                         <ul className='flex transition-all duration-700 -bottom-10 justify-center items-center gap-2 absolute w-full group-hover:bottom-3'>
                             <li className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all'><AiFillHeart /></li>
                             <Link className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all' to='#'><FaEye /></Link>
-                            <li className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all'><AiOutlineShoppingCart /></li>
+                            <li onClick={() => add_card(p._id)} className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all'><AiOutlineShoppingCart /></li>
                         </ul>
                     </div>
                     <div className='flex justify-start items-start flex-col gap-1'>
