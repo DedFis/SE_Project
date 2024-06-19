@@ -27,6 +27,7 @@ const Headers = () => {
   const { categorys } = useSelector((state) => state.home);
   const { userInfo } = useSelector((state) => state.auth);
   const { card_product_count } = useSelector((state) => state.card);
+
   const { pathname } = useLocation();
   const [showShidebar, setShowShidebar] = useState(true);
   const [categoryShow, setCategoryShow] = useState(true);
@@ -77,7 +78,7 @@ const Headers = () => {
                     <li>English</li>
                   </ul>
                 </div>
-                {user ? (
+                {userInfo ? (
                   <Link
                     className="flex cursor-pointer justify-center items-center gap-2 text-sm"
                     to="/dashboard"
@@ -85,7 +86,7 @@ const Headers = () => {
                     <span>
                       <FaUser />
                     </span>
-                    <span>Madeline</span>
+                    <span>{userInfo.name}</span>
                   </Link>
                 ) : (
                   <Link
@@ -235,7 +236,7 @@ const Headers = () => {
                   <li>English</li>
                 </ul>
               </div>
-              {user ? (
+              {userInfo ? (
                 <Link
                   className="flex cursor-pointer justify-center items-center gap-2 text-sm"
                   to="/dashboard"
@@ -243,7 +244,7 @@ const Headers = () => {
                   <span>
                     <FaUser />
                   </span>
-                  <span>{user.name}</span>
+                  <span>{userInfo.name}</span>
                 </Link>
               ) : (
                 <div className="flex cursor-pointer justify-center items-center gap-2 text-sm">
