@@ -7,9 +7,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineGoogle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
-import { customer_register } from "../store/reducers/authReducer";
+import { customer_register, messageClear } from "../store/reducers/authReducer";
 
 const Register = () => {
+  const navigate = useNavigate();
+
+  const { loader, successMessage, errorMessage, userInfo } = useSelector(
+    (state) => state.auth
+  );
   const dispatch = useDispatch();
   const [state, setState] = useState({
     name: "",
@@ -29,13 +34,27 @@ const Register = () => {
     dispatch(customer_register(state));
   };
 
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+    if (userInfo) {
+      navigate(`/`);
+    }
+  }, [successMessage, errorMessage]);
+
   return (
     <div>
-      {/* {
-                loader && <div className='w-screen h-screen flex justify-center items-center fixed left-0 top-0 bg-[#38303033] z-[999]'>
-                    <FadeLoader />
-                </div>
-            } */}
+      {loader && (
+        <div className="w-screen h-screen flex justify-center items-center fixed left-0 top-0 bg-[#38303033] z-[999]">
+          <FadeLoader />
+        </div>
+      )}
       <Headers />
       <div className="bg-slate-200 mt-4">
         <div className="w-full justify-center items-center p-10">
@@ -73,7 +92,7 @@ const Register = () => {
                     />
                   </div>
                   <div className="flex flex-col gap-1 mb-4">
-                    <label htmlFor="password">Passoword</label>
+                    <label htmlFor="password">Password</label>
                     <input
                       onChange={inputHandle}
                       value={state.password}
