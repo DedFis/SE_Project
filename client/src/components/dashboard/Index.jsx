@@ -90,7 +90,7 @@ const Index = () => {
                                     <td scope='row' className='px-6 py-4 font-medium whitespace-nonwrap' >{o.payment_status}</td>
                                     <td scope='row' className='px-6 py-4 font-medium whitespace-nonwrap' >{o.delivery_status}</td>
                                     <td scope='row' className='px-6 py-4' >
-                                        <Link to={`dashboard/order/details/${o._id}`}>
+                                        <Link to={`/dashboard/order/details/${o._id}`}>
                                             <span className='bg-green-100 text-green-800 text-sm font-normal mr-2 px-2.5 py-[1px] rounded'>view</span>
                                         </Link>
                                         <span onClick={()=>redirect(o)} className='bg-green-100 text-green-800 text-sm font-normal mr-2 px-2.5 py-[1px] rounded cursor-pointer'>Pay Now</span>
