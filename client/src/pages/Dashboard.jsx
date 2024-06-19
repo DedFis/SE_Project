@@ -72,11 +72,11 @@ const Dashboard = () => {
                                 </li>
                             </ul>
                         </div>
-                        {/* <div className='w-[calc(100%-270px)] md-lg:w-full'>
+                        <div className='w-[calc(100%-270px)] md-lg:w-full'>
                             <div className='mx-4 md-lg:mx-0'>
                                 <Outlet />
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
             </div>
