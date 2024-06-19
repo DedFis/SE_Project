@@ -25,12 +25,8 @@ const Headers = () => {
   const navigate = useNavigate();
 
   const { categorys } = useSelector((state) => state.home);
-<<<<<<< HEAD
   const { userInfo } = useSelector((state) => state.auth);
   const { card_product_count } = useSelector((state) => state.card);
-=======
->>>>>>> parent of 294d7d41 (Debug)
-
   const { pathname } = useLocation();
   const [showShidebar, setShowShidebar] = useState(true);
   const [categoryShow, setCategoryShow] = useState(true);
