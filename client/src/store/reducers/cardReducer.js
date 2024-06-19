@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/api";
 
 export const add_to_card = createAsyncThunk(
-  "auth/add_to_card",
+  "card/add_to_card",
   async (info, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.post("/home/product/add-to-card", info);
@@ -15,14 +15,16 @@ export const add_to_card = createAsyncThunk(
 );
 
 export const get_card_products = createAsyncThunk(
-  "auth/get_card_products",
+  "card/get_card_products",
   async (userId, { rejectWithValue, fulfillWithValue }) => {
     try {
+      console.log(userId)
       const { data } = await api.get(
-        `/home/product/get_card_products/${userId}`
+        `/home/product/get-card-product/${userId}`
       );
       return fulfillWithValue(data);
     } catch (error) {
+      // console.log(error)
       return rejectWithValue(error.response.data);
     }
   }
@@ -100,7 +102,7 @@ export const cardReducer = createSlice({
       })
       .addCase(add_to_card.fulfilled, (state, { payload }) => {
         state.successMessage = payload.message;
-        state.card_products_count = state.card_products_count + 1;
+        state.card_product_count = state.card_product_count + 1;
       })
       .addCase(get_card_products.fulfilled, (state, { payload }) => {
         state.card_products = payload.card_products;

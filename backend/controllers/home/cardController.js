@@ -24,6 +24,7 @@ class cardController {
         ],
       });
       if (product) {
+        console.log(product)
         responseReturn(res, 404, { error: "Product already added to card" });
       } else {
         const product = await cardModel.create({
@@ -31,12 +32,15 @@ class cardController {
           productId,
           quantity,
         });
+
+        console.log(product)
         responseReturn(res, 201, { message: "Add to card success", product });
       }
     } catch (error) {
       console.log(error.message);
     }
   };
+
   get_card_products = async (req, res) => {
     const co = 5;
     const { userId } = req.params;
@@ -64,8 +68,9 @@ class cardController {
       let calculatePrice = 0;
       let card_products_count = 0;
       const outOfStockProduct = card_products.filter(
-        (p) => p.product[0].stock < p.quantity
+        (p) => p.products[0].stock < p.quantity
       );
+
 
       for (let i = 0; i < outOfStockProduct; i++) {
         card_products_count =
@@ -92,6 +97,9 @@ class cardController {
       let unique = [
         ...new Set(stockProduct.map((p) => p.products[0].sellerId.toString())),
       ];
+
+      console.log(unique.length)
+
       for (let i = 0; i < unique.length; i++) {
         let price = 0;
         for (let j = 0; j < stockProduct.length; j++) {
@@ -128,9 +136,11 @@ class cardController {
                     },
                   ],
             };
+            console.log(p[i])
           }
         }
       }
+
       responseReturn(res, 200, {
         card_products: p,
         price: calculatePrice,
@@ -140,9 +150,10 @@ class cardController {
         buy_product_item,
       });
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   };
+
   delete_card_product = async (req, res) => {
     const { card_id } = req.params;
     try {
