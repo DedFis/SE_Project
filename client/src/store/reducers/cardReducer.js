@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/api";
 
+
 export const add_to_card = createAsyncThunk(
   "card/add_to_card",
   async (info, { rejectWithValue, fulfillWithValue }) => {
@@ -46,7 +47,7 @@ export const quantity_inc = createAsyncThunk(
   "card/quantity_inc",
   async (card_id, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.delete(
+      const { data } = await api.put(
         `/home/product/quantity-inc/${card_id}`
       );
       return fulfillWithValue(data);
@@ -60,7 +61,7 @@ export const quantity_dec = createAsyncThunk(
   "card/quantity_dec",
   async (card_id, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.delete(
+      const { data } = await api.put(
         `/home/product/quantity-dec/${card_id}`
       );
       return fulfillWithValue(data);

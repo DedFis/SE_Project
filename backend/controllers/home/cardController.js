@@ -168,12 +168,12 @@ class cardController {
     try {
       const product = await cardModel.findById(card_id);
       const { quantity } = product;
-      await cardModel.findByIdAndUpdate(card_Id, {
+      await cardModel.findByIdAndUpdate(card_id, {
         quantity: quantity + 1,
       });
       responseReturn(res, 200, { message: "success" });
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
@@ -182,7 +182,7 @@ class cardController {
     try {
       const product = await cardModel.findById(card_id);
       const { quantity } = product;
-      await cardModel.findByIdAndUpdate(card_Id, {
+      await cardModel.findByIdAndUpdate(card_id, {
         quantity: quantity - 1,
       });
       responseReturn(res, 200, { message: "success" });
