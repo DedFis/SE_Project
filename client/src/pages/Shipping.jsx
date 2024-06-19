@@ -58,6 +58,8 @@ const Shipping = () => {
         items,
       })
     );
+
+    navigate(`/`);
   };
 
   return (

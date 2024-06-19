@@ -11,7 +11,7 @@ export const place_order = createAsyncThunk(
     userId,
     navigate,
     items,
-  }) => {
+  },  { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.post("/home/order/place-order", {
         price,
@@ -30,9 +30,18 @@ export const place_order = createAsyncThunk(
         },
       });
       console.log("ok");
-      return true;
+      return fulfillWithValue({
+        price,
+        products,
+        shipping_fee,
+        shippingInfo,
+        userId,
+        navigate,
+        items,
+      });
     } catch (error) {
       console.log(error.response);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -40,7 +49,7 @@ export const place_order = createAsyncThunk(
 export const orderReducer = createSlice({
   name: "order",
   initialState: {
-    myOders: [],
+    myOrders: [],
     errorMessage: "",
     successMessage: "",
     myOrder: {},
@@ -51,12 +60,15 @@ export const orderReducer = createSlice({
       state.successMessage = "";
     },
   },
-  //   extraReducers: (builder) => {
-  //     builder;
-  //     //   .addCase(add_to_card.rejected, (state, { payload }) => {
-  //     //     state.errorMessage = payload.error;
-  //     //   })
-  //   },
+    extraReducers: (builder) => {
+      builder
+        .addCase(place_order.rejected, (state, { payload }) => {
+          state.errorMessage = payload.error;
+        })
+        .addCase(place_order.fulfilled, (state, { payload }) => {
+          state.successMessage = payload.message;
+        })
+    },
 });
 
 export const { messageClear, user_reset } = orderReducer.actions;
