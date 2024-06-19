@@ -22,7 +22,7 @@ export const place_order = createAsyncThunk(
         navigate,
         items,
       });
-      navigate("/payment", {
+      navigate("/", {
         state: {
           price: price + shipping_fee,
           items,
