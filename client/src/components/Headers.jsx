@@ -25,6 +25,11 @@ const Headers = () => {
   const navigate = useNavigate();
 
   const { categorys } = useSelector((state) => state.home);
+<<<<<<< HEAD
+  const { userInfo } = useSelector((state) => state.auth);
+  const { card_product_count } = useSelector((state) => state.card);
+=======
+>>>>>>> parent of 294d7d41 (Debug)
 
   const { pathname } = useLocation();
   const [showShidebar, setShowShidebar] = useState(true);
@@ -34,6 +39,14 @@ const Headers = () => {
 
   const search = () => {
     navigate(`/products/search?category=${category}&&value=${searchValue}`);
+  };
+
+  const redirect_card_page = () => {
+    if (userInfo) {
+      navigate(`/card`);
+    } else {
+      navigate(`/login`);
+    }
   };
 
   return (
@@ -179,17 +192,18 @@ const Headers = () => {
                                                 </div>
                                             } */}
                     </div>
-                    <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
+                    <div
+                      onClick={redirect_card_page}
+                      className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
+                    >
                       <span className="text-xl text-orange-500">
                         <AiFillShopping />
                       </span>
-                      {/* {
-                                                card_product_count !== 0 && <div className='w-[20px] h-[20px] absolute bg-green-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px]'>
-                                                    {
-                                                        card_product_count
-                                                    }
-                                                </div>
-                                            } */}
+                      {card_product_count !== 0 && (
+                        <div className="w-[20px] h-[20px] absolute bg-green-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px]">
+                          {card_product_count}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

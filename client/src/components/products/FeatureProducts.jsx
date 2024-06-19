@@ -1,3 +1,51 @@
+<<<<<<< HEAD
+import React, { useEffect } from "react";
+import { AiFillHeart, AiOutlineShoppingCart } from "react-icons/ai";
+import { FaEye } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import Ratings from "../Ratings";
+import { add_to_card, messageClear } from "../../store/reducers/cardReducer";
+
+const FeatureProducts = ({ products }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+  const { successMessage, errorMessage } = useSelector((state) => state.card);
+
+  const add_card = (id) => {
+    if (userInfo) {
+      dispatch(
+        add_to_card({
+          userId: userInfo.id,
+          quantity: 1,
+          productId: id,
+        })
+      );
+    } else {
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [errorMessage, successMessage]);
+
+  return (
+    <div className="w-[85%] flex flex-wrap mx-auto">
+      <div className="w-full">
+        <div className="text-center flex justify-center items-center flex-col text-4xl text-slate-600 font-bold relative pb-[45px]">
+          <h2>Fresh Seafood</h2>
+          <div className="w-[100px] h-[4px] bg-[#46c6c7] mt-4"></div>
+=======
 import React, { useEffect } from 'react'
 import { AiFillHeart, AiOutlineShoppingCart } from 'react-icons/ai'
 import { FaEye } from 'react-icons/fa'
@@ -82,8 +130,28 @@ const FeatureProducts = ({products}) => {
                     </div>)
                 }
             </div>
+>>>>>>> parent of 294d7d41 (Debug)
         </div>
     )
 }
 
+<<<<<<< HEAD
+export default FeatureProducts;
+
+// const dispatch = useDispatch()
+// const { userInfo } = useSelector(state => state.auth)
+// const { successMessage, errorMessage } = useSelector(state => state.card)
+
+// useEffect(() => {
+//     if (successMessage) {
+//         toast.success(successMessage)
+//         dispatch(messageClear())
+//     }
+//     if (errorMessage) {
+//         toast.error(errorMessage)
+//         dispatch(messageClear())
+//     }
+// }, [errorMessage, successMessage])
+=======
 export default FeatureProducts
+>>>>>>> parent of 294d7d41 (Debug)
