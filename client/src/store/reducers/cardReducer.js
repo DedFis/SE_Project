@@ -18,13 +18,11 @@ export const get_card_products = createAsyncThunk(
   "card/get_card_products",
   async (userId, { rejectWithValue, fulfillWithValue }) => {
     try {
-      console.log(userId)
       const { data } = await api.get(
         `/home/product/get-card-product/${userId}`
       );
       return fulfillWithValue(data);
     } catch (error) {
-      // console.log(error)
       return rejectWithValue(error.response.data);
     }
   }
@@ -35,7 +33,7 @@ export const delete_card_product = createAsyncThunk(
   async (card_id, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.delete(
-        `/home/product/delete_card_product/${card_id}`
+        `/home/product/delete-card-product/${card_id}`
       );
       return fulfillWithValue(data);
     } catch (error) {
@@ -100,12 +98,19 @@ export const cardReducer = createSlice({
       .addCase(add_to_card.rejected, (state, { payload }) => {
         state.errorMessage = payload.error;
       })
+      .addCase(add_to_card.pending, (state, _) => {
+        state.card_product_count = state.card_product_count;
+      })
       .addCase(add_to_card.fulfilled, (state, { payload }) => {
         state.successMessage = payload.message;
         state.card_product_count = state.card_product_count + 1;
       })
+      .addCase(get_card_products.pending, (state, _) => {
+        state.card_product_count = state.card_product_count;
+      })
       .addCase(get_card_products.fulfilled, (state, { payload }) => {
         state.card_products = payload.card_products;
+        state.card_product_count = state.card_product_count;
         state.price = payload.price;
         state.card_product_count = payload.card_product_count;
         state.shipping_fee = payload.shipping_fee;
@@ -113,6 +118,7 @@ export const cardReducer = createSlice({
         state.buy_product_item = payload.buy_product_item;
       })
       .addCase(delete_card_product.fulfilled, (state, { payload }) => {
+        state.card_product_count = state.card_product_count - 1;
         state.successMessage = payload.message;
       })
       .addCase(quantity_inc.fulfilled, (state, { payload }) => {

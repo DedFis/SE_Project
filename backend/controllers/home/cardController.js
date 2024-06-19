@@ -136,7 +136,6 @@ class cardController {
                     },
                   ],
             };
-            console.log(p[i])
           }
         }
       }
