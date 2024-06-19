@@ -82,7 +82,7 @@ class orderController {
 
       await authorModel.insertMany(authorOrderData);
       for (let k = 0; k < cardId.length; k++) {
-        await cartModel.findByIdAndDelete(cardId[k]);
+        await cardModel.findByIdAndDelete(cardId[k]);
       }
 
       setTimeout(() => {
