@@ -1,3 +1,8 @@
+# [Vid Playlist](https://www.youtube.com/playlist?list=PLTyDDs5BP9JR2o6Z5wV3kTj0MKN44P1RI)
+
+## Progress :
+Vid 36
+
 ### DB :
 mongodb+srv://projectdev:hfzqvHDTifcC1lgT@seproject.ybckqm2.mongodb.net/
 
