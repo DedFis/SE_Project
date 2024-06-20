@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../Pagination";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import {useDispatch, useSelector} from 'react-redux';
+import { getActiveSeller } from "../../store/Reducers/sellerReducer";
 
 const Sellers = () => {
+  const dispatch = useDispatch()
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [parPage, setParPage] = useState(5);
-  const [show, setShow] = useState(false);
+  const {sellers} = useSelector(state=>state.seller)
+  // const [show, setShow] = useState(false);
+
+  useEffect(()=>{
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      searchValue
+    }
+    dispatch(getActiveSeller(obj))
+  }, [searchValue, currentPage, parPage])
 
   return (
     <div className="px-2 lg:px-7 pt-5">
@@ -21,7 +34,7 @@ const Sellers = () => {
             <option value="15">15</option>
             <option value="25">25</option>
           </select>
-          <input
+          <input onChange={e=>setSearchValue(e.target.value)}
             className="px-4 py-2 focus:border-indigo-500 outline-none bg-transparent border border-slate-700 rounded-md text-[#d0d2d6]"
             type="text"
             placeholder="search"
@@ -61,13 +74,13 @@ const Sellers = () => {
               </tr>
             </thead>
             <tbody className="text-sm font-normal">
-              {[1, 2, 3, 4, 5].map((d, i) => (
+              {sellers.map((d, i) => (
                 <tr key={i}>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    {d}
+                    {i+1}
                   </td>
                   <td
                     scope="row"
@@ -75,7 +88,7 @@ const Sellers = () => {
                   >
                     <img
                       className="w-[45px] h-[45px]"
-                      src={`http://localhost:3000/images/${d}.jpg`}
+                      src={`http://localhost:3000/images/${d.image}.jpg`}
                       alt=""
                     />
                   </td>
@@ -83,44 +96,44 @@ const Sellers = () => {
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>Emily Laura</span>
+                    <span>{d.name}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>Emily Fashion</span>
+                    <span>{d.shopInfo?.shopName}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>Pending</span>
+                    <span>{d.status}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>Emily@gmail.com</span>
+                    <span>{d.email}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>Manager</span>
+                    <span>{d.shopInfo?.division}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>Jakarta</span>
+                    <span>{d.shopInfo?.district}</span>
                   </td>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
                     <div className="flex justify-start items-center gap-4">
-                      <Link to='/admin/dashboard/seller/details/1' className="p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50">
+                      <Link to={`/admin/dashboard/seller/details/${d._id}`} className="p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50">
                         <FaEye />
                       </Link>
                     </div>

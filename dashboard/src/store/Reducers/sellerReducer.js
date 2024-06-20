@@ -44,6 +44,20 @@ export const sellerStatusUpdate = createAsyncThunk(
   }
 )
 
+export const getActiveSeller = createAsyncThunk(
+  'seller/getActiveSeller',
+  async ({ parPage, page, searchValue }, {rejectWithValue, fulfillWithValue}) => {
+      try{
+        const {data} = await api.get(`/get-sellers?page=${page}&&searchValue=${searchValue}&&parPage=${parPage}`, {
+          withCredentials: true
+      })
+          return fulfillWithValue(data)
+      } catch (error){
+          return rejectWithValue(error.response.data)
+      }
+  }
+)
+
 export const sellerReducer = createSlice({
   name: 'seller',
 
@@ -74,6 +88,10 @@ export const sellerReducer = createSlice({
     builder.addCase(sellerStatusUpdate.fulfilled, (state, {payload}) => {
       state.seller = payload.seller
       state.successMessage = payload.message
+    });
+    builder.addCase(getActiveSeller.fulfilled, (state, {payload}) => {
+      state.sellers = payload.sellers
+      state.totalSeller = payload.totalSeller
     });
   }
 })
