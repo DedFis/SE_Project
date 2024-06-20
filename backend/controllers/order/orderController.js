@@ -207,7 +207,7 @@ getAdminOrders = async(req, res)=>{
             as : 'subOrder'
           }
         }
-      ]).countDocuments()
+      ])
 
       responseReturn(res, 200, {orders, totalOrder: totalOrder.length})
     }
