@@ -75,6 +75,36 @@ class sellerController {
         }
     }
 
+    get_deactive_seller = async (req, res) => {
+        let { page, searchValue, parPage } = req.query
+        page = parseInt(page)
+        parPage = parseInt(parPage)
+
+        const skipPage = parPage * (page - 1)
+
+        try {
+            if (searchValue) {
+                const sellers = await sellerModel.find({
+                    $text: { $search: searchValue },
+                    status: 'deactive'
+                }).skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+
+                const totalSeller = await sellerModel.find({
+                    $text: { $search: searchValue },
+                    status: 'deactive'
+                }).countDocuments()
+
+                responseReturn(res, 200, { totalSeller, sellers })
+            } else {
+                const sellers = await sellerModel.find({ status: 'deactive' }).skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+                const totalSeller = await sellerModel.find({ status: 'deactive' }).countDocuments()
+                responseReturn(res, 200, { totalSeller, sellers })
+            }
+
+        } catch (error) {
+            console.log('deactive seller get ' + error.message)
+        }
+    }
 }
 
 module.exports = new sellerController()
