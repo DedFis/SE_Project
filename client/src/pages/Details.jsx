@@ -8,7 +8,7 @@ import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
-// import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import 'swiper/css/pagination'
 import { Pagination } from 'swiper/modules'
 import Ratings from '../components/Ratings'
@@ -17,19 +17,21 @@ import { FaFacebookF, FaLinkedin } from 'react-icons/fa'
 import { AiFillGithub, AiOutlineTwitter } from 'react-icons/ai'
 import Reviews from '../components/Reviews'
 
-// import { get_product } from '../store/reducers/homeReducer'
+import { get_product } from '../store/reducers/homeReducer'
 // import { add_to_card, messageClear, add_to_wishlist } from '../store/reducers/cardReducer'
 // import toast from 'react-hot-toast'
 
 const Details = () => {
+    const {slug} = useParams()
+    const dispatch = useDispatch()
+    const { product, relatedProducts, moreProducts } = useSelector(state => state.home)
+
     const images = [1,2,3,4,5]
     const discount = 5
     const stock = 5
 
     // const navigate = useNavigate()
     // const { slug } = useParams()
-    // const dispatch = useDispatch()
-    // const { product, relatedProducts, moreProducts } = useSelector(state => state.home)
     // const { userInfo } = useSelector(state => state.auth)
     // const { errorMessage, successMessage } = useSelector(state => state.card)
 
@@ -113,19 +115,9 @@ const Details = () => {
 
     // }
 
-    // useEffect(() => {
-    //     dispatch(get_product(slug))
-    // }, [slug])
-    // useEffect(() => {
-    //     if (errorMessage) {
-    //         toast.error(errorMessage)
-    //         dispatch(messageClear())
-    //     }
-    //     if (successMessage) {
-    //         toast.success(successMessage)
-    //         dispatch(messageClear())
-    //     }
-    // }, [errorMessage, successMessage])
+    useEffect(() => {
+        dispatch(get_product(slug))
+    }, [slug])
 
     // const buy = () => {
     //     let price = 0;
@@ -173,9 +165,9 @@ const Details = () => {
                     <div className='flex justify-start items-center text-md text-slate-600 w-full'>
                         <Link to='/'>Home</Link>
                         <span className='pt-1'><MdOutlineKeyboardArrowRight /></span>
-                        <Link to='/'>Fish</Link>
+                        <Link to='/'>{product?.category}</Link>
                         <span className='pt-1'><MdOutlineKeyboardArrowRight /></span>
-                        <span>Salmon</span>
+                        <span>{product.name}</span>
                     </div>
                 </div>
             </div>
@@ -184,21 +176,21 @@ const Details = () => {
                     <div className='grid grid-cols-2 md-lg:grid-cols-1 gap-8'>
                         <div>
                             <div className='p-5 border'>
-                                <img className='h-[500px] w-full' src={image ? `http://localhost:3000/images/product/${image}.jpg` : `http://localhost:3000/images/product/${images[2]}.jpg`} alt="" />
+                                <img className='h-[500px] w-full' src={image ? image : product.images?.[0]} alt="" />
                             </div>
                             <div className='py-3'>
                                 {
-                                    images && <Carousel
+                                    product.images && <Carousel
                                         autoPlay={true}
                                         infinite={true}
                                         responsive={responsive}
                                         transitionDuration={500}
                                     >
                                         {
-                                            images.map((img, i) => {
+                                            product.images.map((img, i) => {
                                                 return (
                                                     <div key={i} onClick={() => setImage(img)}>
-                                                        <img className='h-[120px] cursor-pointer' src={`http://localhost:3000/images/product/${img}.jpg`} alt="" />
+                                                        <img className='h-[120px] cursor-pointer' src={img} alt="" />
                                                     </div>
                                                 )
                                             })
@@ -209,24 +201,24 @@ const Details = () => {
                         </div>
                         <div className='flex flex-col gap-5'>
                             <div className='text-3xl text-slate-600 font-bold'>
-                                <h2>Salmon</h2>
+                                <h2>{product.name}</h2>
                             </div>
                             <div className='flex justify-start items-center gap-4'>
                                 <div className='flex text-xl'>
-                                    <Ratings ratings={2.3} />
+                                    <Ratings ratings={product.rating} />
                                 </div>
                                 <span className='text-green-500'>(23 reviews)</span>
                             </div>
                             <div className='text-2xl text-red-500 font-bold flex gap-3'>
                                 {
-                                    discount !== 0 ? <>
-                                        <h2 className='line-through'>$500</h2>
-                                        <h2>${500 - Math.floor((500 * discount) / 100)} (-{discount}%)</h2>
-                                    </> : <h2>Price : $500</h2>
+                                    product.discount !== 0 ? <>
+                                        <h2 className='line-through'>${product.price}</h2>
+                                        <h2>${500 - Math.floor((500 * product.discount) / 100)} (-{product.discount}%)</h2>
+                                    </> : <h2>Price : ${product.price}</h2>
                                 }
                             </div>
                             <div className='text-slate-600'>
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                <p>{product.description}</p>
                             </div>
                             <div className='flex gap-3 pb-10 border-b'>
                                 {
@@ -253,8 +245,8 @@ const Details = () => {
                                     <span>Share on</span>
                                 </div>
                                 <div className='flex flex-col gap-5'>
-                                    <span className={`text-${stock ? 'green' : 'red'}-500`}>
-                                        {stock ? `In Stock(${stock})` : 'Out of Stock'}
+                                    <span className={`text-${product.stock ? 'green' : 'red'}-500`}>
+                                        {product.stock ? `In Stock(${product.stock})` : 'Out of Stock'}
                                     </span>
                                     <ul className='flex justify-start items-center gap-3'>
                                         <li>
@@ -274,7 +266,7 @@ const Details = () => {
                             </div>
                             <div className='flex gap-3'>
                                 {
-                                    stock ? <button className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-emerald-500/40 bg-emerald-500 text-white'>Buy Now</button> : ""
+                                    product.stock ? <button className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-emerald-500/40 bg-emerald-500 text-white'>Buy Now</button> : ""
                                 }
                                 <Link className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-lime-500/40 bg-lime-500 text-white block'>Chat Seller</Link>
                             </div>
@@ -293,7 +285,7 @@ const Details = () => {
                                 </div>
                                 <div>
                                     {
-                                        state === 'reviews' ? <Reviews /> : <p className='py-5 text-slate-600'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                        state === 'reviews' ? <Reviews /> : <p className='py-5 text-slate-600'>{product.description}</p>
                                     }
                                 </div>
                             </div>
