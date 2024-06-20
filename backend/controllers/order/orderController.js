@@ -18,7 +18,7 @@ class orderController {
         await customerOrder.findByIdAndUpdate(id, {
           delivery_status: "canceled",
         });
-        await authorModel.updateMany(
+        await authorOrderModel.updateMany(
           {
             orderId: id,
           },
@@ -86,7 +86,7 @@ class orderController {
         });
       }
 
-      await authorModel.insertMany(authorOrderData);
+      await authorOrderModel.insertMany(authorOrderData);
       for (let k = 0; k < cardId.length; k++) {
         await cardModel.findByIdAndDelete(cardId[k]);
       }
@@ -217,6 +217,34 @@ getAdminOrders = async(req, res)=>{
   }
 }
 
+getSellerOrders = async (req, res) => {
+
+  const { sellerId } = req.params
+  let { page, parPage, searchValue } = req.query
+  page = parseInt(page)
+  parPage = parseInt(parPage)
+
+  const skipPage = parPage * (page - 1)
+
+
+  try {
+      if (searchValue) {
+
+      } else {
+          const orders = await authorOrderModel.find({
+              sellerId,
+          }).skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+          const totalOrder = await authorOrderModel.find({
+              sellerId,
+          }).countDocuments()
+          responseReturn(res, 200, { orders, totalOrder })
+      }
+  } catch (error) {
+      console.log('get seller order error ' + error.message)
+      responseReturn(res, 500, { message: 'internal server error' })
+  }
+}
+
 get_admin_order = async (req, res) => {
 
   const { orderId } = req.params
@@ -237,6 +265,21 @@ get_admin_order = async (req, res) => {
       responseReturn(res, 200, { order: order[0] })
   } catch (error) {
       console.log('get admin order ' + error.message)
+  }
+}
+
+admin_order_status_update = async (req, res) => {
+  const { orderId } = req.params
+  const { status } = req.body
+
+  try {
+      await customerOrder.findByIdAndUpdate(orderId, {
+          delivery_status: status
+      })
+      responseReturn(res, 200, { message: 'order status change success' })
+  } catch (error) {
+      console.log('get admin order status error ' + error.message)
+      responseReturn(res, 500, { message: 'internal server error' })
   }
 }
 }

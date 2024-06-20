@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { get_order } from '../../store/reducers/orderReducer'
-import {useSelector, useDispatch} from 'react-redux'
-import { getAdminOrders} from '../../../../dashboard/src/store/Reducers/OrderReducer'
+// import { getAdminOrders} from '../../../../dashboard/src/store/Reducers/OrderReducer'
+// import { getAdminOrders } from '../../../../backend/controllers/order/orderController'
 
 const Order = () => {
 
@@ -11,19 +11,19 @@ const Order = () => {
     const dispatch = useDispatch()
     const { myOrder } = useSelector(state => state.order)
     const { userInfo } = useSelector(state => state.auth)
-    const {totalOrder, orders} = useSelector(state=>state.order)
-
-    // useEffect(() => {
-    //     dispatch(get_order(orderId))
-    // }, [orderId])
+    // const {totalOrder, orders} = useSelector(state=>state.order)
 
     useEffect(() => {
-        dispatch(getAdminOrders({
-            parPage: parseInt(parPage),
-            page: parseInt(currentPage),
-            searchValue
-        }))
-    }, [])
+        dispatch(get_order(orderId))
+    }, [orderId])
+
+    // useEffect(() => {
+    //     dispatch(getAdminOrders({
+    //         parPage: parseInt(parPage),
+    //         page: parseInt(currentPage),
+    //         searchValue
+    //     }))
+    // }, [])
 
     return (
         <div className='bg-white p-5'>

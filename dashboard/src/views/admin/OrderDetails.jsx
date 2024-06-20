@@ -1,23 +1,44 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
+import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from "react-redux";
-import { get_admin_order } from "../../store/Reducers/OrderReducer";
+import { get_admin_order, admin_order_status_update } from "../../store/Reducers/OrderReducer";
 
 const OrderDetails = () => {
   const {orderId} = useParams()
   const dispatch = useDispatch()
 
-  const {order} = useSelector(state=>state.order)
+  const {order, errorMessage, successMessage} = useSelector(state=>state.order)
 
   useEffect(()=>{
     dispatch(get_admin_order(orderId))
   }, [orderId])
+
+  const [status, setStatus] = useState('')
+  useEffect(()=>{
+    setStatus(order?.delivery_status)
+  }, [order])
+
+  const status_update = (e) => {
+    dispatch(admin_order_status_update({orderId, info: {status: e.target.value}}))
+    setStatus(e.target.value)
+  }
+
+  useEffect(()=>{
+    if(successMessage){
+      toast.success(successMessage)
+    }
+    if(errorMessage){
+      toast.error(errorMessage)
+    }
+  }, [successMessage, errorMessage])
+
   return (
     <div className='px-2 lg:px-7 pt-5'>
         <div className='w-full p-4  bg-[#283046] rounded-md'>
             <div className='flex justify-between items-center p-4'>
                 <h2 className='text-xl text-[#d0d2d6]'>Order Details</h2>
-                <select name="" id="" className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]'>
+                <select onChange={status_update} value={status}  name="" id="" className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]'>
                     <option value="pending">pending</option>
                     <option value="processing">processing</option>
                     <option value="warehouse">warehouse</option>
