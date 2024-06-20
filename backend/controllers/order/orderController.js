@@ -1,4 +1,4 @@
-const authorModel = require("../../models/authOrder");
+const authorOrderModel = require("../../models/authOrder");
 const customerOrder = require("../../models/customerOrder");
 const cardModel = require("../../models/cardModel");
 const {
@@ -172,6 +172,47 @@ get_order = async (req, res) => {
       })
   } catch (error) {
       console.log(error.message)
+  }
+}
+
+getAdminOrders = async(req, res)=>{
+  let {page, parPage, searchValue} = req.query
+  page = parseInt(page)
+  parPage = parseInt(parPage)
+
+  const skipPage = parPage * (page-1)
+
+  try{
+    if(searchValue){
+
+    }
+    else{
+      const orders = await customerOrder.aggregate([
+        {
+          $lookup : {
+            from : 'authorOrderModel',
+            localField : '_id',
+            foreignField : 'orderId',
+            as : 'subOrder'
+          }
+        }
+      ]).skip(skipPage).limit(parPage).sort({createdAt:-1})
+
+      const totalOrder = await customerOrder.aggregate([
+        {
+          $lookup : {
+            from : 'authorOrderModel',
+            localField : '_id',
+            foreignField : 'orderId',
+            as : 'subOrder'
+          }
+        }
+      ]).countDocuments()
+
+      responseReturn(res, 200, {orders, totalOrder: totalOrder.length})
+    }
+  }catch(error){
+    console.log(error.message)
   }
 }
 }

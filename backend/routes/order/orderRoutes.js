@@ -6,6 +6,8 @@ router.get("/home/customer/get-dashboard-data/:userId", orderController.get_cust
 router.get("/home/customer/get-orders/:customerId/:status", orderController.get_orders);
 router.get("/home/customer/get-order/:orderId", orderController.get_order);
 
+router.get("/admin/orders", orderController.getAdminOrders);
+
 module.exports = router;
 
 // const customerAuthController = require("../../controllers/home/cardController");

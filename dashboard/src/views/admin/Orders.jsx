@@ -3,8 +3,10 @@ import { useState } from "react";
 import { BsArrowBarDown } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Pagination from "../Pagination";
+import {useSelector} from 'react-redux'
 
 const Orders = () => {
+  const {totalOrder, orders} = useSelector(state=>state.order)
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [parPage, setParPage] = useState(5);
