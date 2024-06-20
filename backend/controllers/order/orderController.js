@@ -282,6 +282,34 @@ admin_order_status_update = async (req, res) => {
       responseReturn(res, 500, { message: 'internal server error' })
   }
 }
+
+get_seller_order = async (req, res) => {
+
+  const { orderId } = req.params
+
+  try {
+      const order = await authorOrderModel.findById(orderId)
+
+      responseReturn(res, 200, { order })
+  } catch (error) {
+      console.log('get admin order ' + error.message)
+  }
+}
+
+seller_order_status_update = async (req, res) => {
+  const { orderId } = req.params
+  const { status } = req.body
+
+  try {
+      await authorOrderModel.findByIdAndUpdate(orderId, {
+          delivery_status: status
+      })
+      responseReturn(res, 200, { message: 'order status change success' })
+  } catch (error) {
+      console.log('get admin order status error ' + error.message)
+      responseReturn(res, 500, { message: 'internal server error' })
+  }
+}
 }
 
 module.exports = new orderController();

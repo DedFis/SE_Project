@@ -39,11 +39,35 @@ export const get_admin_order = createAsyncThunk(
     }
 )
 
+export const get_seller_order = createAsyncThunk(
+    'order/get_seller_order',
+    async (orderId, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.get(`/seller/order/${orderId}`, { withCredentials: true })
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 export const admin_order_status_update = createAsyncThunk(
     'order/admin_order_status_update',
     async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
         try {
             const { data } = await api.put(`/admin/order-status/update/${orderId}`, info, { withCredentials: true })
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const seller_order_status_update = createAsyncThunk(
+    'order/seller_order_status_update',
+    async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.put(`/seller/order-status/update/${orderId}`, info, { withCredentials: true })
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -88,6 +112,15 @@ export const OrderReducer = createSlice({
     builder.addCase(getSellerOrders.fulfilled, (state, {payload})=>{
         state.myOrders = payload.orders
         state.totalOrder = payload.totalOrder
+    });
+    builder.addCase(get_seller_order.fulfilled, (state, {payload})=>{
+        state.order = payload.order
+    });
+    builder.addCase(seller_order_status_update.rejected, (state, {payload})=>{
+        state.errorMessage = payload.message
+    });
+    builder.addCase(seller_order_status_update.fulfilled, (state, {payload})=>{
+        state.successMessage = payload.message
     });
   }
 })
