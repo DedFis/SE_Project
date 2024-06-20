@@ -7,6 +7,7 @@ router.get("/home/customer/get-orders/:customerId/:status", orderController.get_
 router.get("/home/customer/get-order/:orderId", orderController.get_order);
 
 router.get("/admin/orders", orderController.getAdminOrders);
+router.get("/admin/order/:orderId", orderController.get_admin_order);
 
 module.exports = router;
 

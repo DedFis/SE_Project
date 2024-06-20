@@ -45,6 +45,7 @@ class orderController {
       const pro = products[i].products;
       for (let j = 0; j < pro.length; j++) {
         let tempCusPro = pro[j].productInfo;
+        tempCusPro.quantity = pro[j].quantity;
         customerOrderProduct.push(tempCusPro);
         if (pro[j]._id) {
           cardId.push(pro[j]._id);
@@ -213,6 +214,29 @@ getAdminOrders = async(req, res)=>{
     }
   }catch(error){
     console.log(error.message)
+  }
+}
+
+get_admin_order = async (req, res) => {
+
+  const { orderId } = req.params
+
+  try {
+      const order = await customerOrder.aggregate([
+          {
+              $match: { _id: new ObjectId(orderId) }
+          }, {
+              $lookup: {
+                  from: 'authororders',
+                  localField: '_id',
+                  foreignField: 'orderId',
+                  as: 'suborder'
+              }
+          }
+      ])
+      responseReturn(res, 200, { order: order[0] })
+  } catch (error) {
+      console.log('get admin order ' + error.message)
   }
 }
 }

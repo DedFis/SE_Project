@@ -11,7 +11,7 @@ const Orders = () => {
     const { totalOrder, myOrders } = useSelector(state => state.order)
     const [currentPage, setCurrentPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
-    const [parPage, setParPage] = useState(5)
+    const [parPage, setParPage] = useState(3)
     const [show, setShow] = useState('')
 
 
