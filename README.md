@@ -49,3 +49,13 @@ Allows sellers to add new products to their storefront (which will be displayed 
 
 4. Product Management
 Includes features to edit and delete products. For each product, sellers can perform updates and deletions as needed and these changes will be integrated into the database.
+
+### HOW TO RUN OUR WEBSITE:
+1. Clone our repository
+2. Install node modules by running "npm i"
+3. In your VSCode terminal, run command "npm start"
+4. To run database, run "npm run dev"
+5. Now you can access our website
+
+
+"Why wait for your fish to swim to you? Dive into our app, where the seafood is fresh, the sellers are friendly, and the admins actually know what they're doing! 🐟📲”
